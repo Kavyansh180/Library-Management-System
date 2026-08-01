@@ -1,794 +1,1239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Library Management System – Project Report</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Library Management System – Capstone Project Report</title>
+<style>
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Code+Pro:wght@400;500&family=Inter:wght@400;500;600&display=swap');
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --primary:   #1e3a5f;
-      --accent:    #2563eb;
-      --accent2:   #0ea5e9;
-      --gold:      #f59e0b;
-      --light:     #f1f5f9;
-      --border:    #e2e8f0;
-      --text:      #1e293b;
-      --muted:     #64748b;
-      --white:     #ffffff;
-    }
+/* ── Document Geometry ── */
+:root {
+  --paper-w: 210mm;
+  --margin-h: 25mm;
+  --margin-v: 28mm;
+  --body-font: 'EB Garamond', 'Georgia', serif;
+  --mono-font: 'Source Code Pro', 'Courier New', monospace;
+  --sans-font: 'Inter', 'Arial', sans-serif;
+  --text:      #1a1a1a;
+  --muted:     #555555;
+  --rule:      #1a1a1a;
+  --accent:    #1a3a6b;
+  --light-bg:  #f7f7f7;
+  --border:    #cccccc;
+  --code-bg:   #f2f2f2;
+}
 
-    body { font-family: 'Inter', sans-serif; color: var(--text); background: #fff; font-size: 13px; line-height: 1.7; }
+html { font-size: 11.5pt; }
 
-    /* ── PAGE BREAKS ── */
-    .page { page-break-after: always; min-height: 100vh; }
-    .page:last-child { page-break-after: avoid; }
-    @media print {
-      .no-print { display: none !important; }
-      .page { page-break-after: always; }
-    }
+body {
+  font-family: var(--body-font);
+  color: var(--text);
+  background: #e8e8e8;
+  line-height: 1.6;
+}
 
-    /* ══════════════════════════════
-       COVER PAGE
-    ══════════════════════════════ */
-    .cover {
-      background: linear-gradient(145deg, #0f172a 0%, #1e3a5f 50%, #1e40af 100%);
-      color: #fff;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center; padding: 60px 40px;
-      position: relative; overflow: hidden;
-    }
-    .cover::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-    .cover-badge {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 50px;
-      padding: 6px 20px;
-      font-size: 11px; font-weight: 500; letter-spacing: 2px;
-      text-transform: uppercase; color: #94d2ff;
-      margin-bottom: 30px;
-    }
-    .cover-icon { font-size: 80px; margin-bottom: 20px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
-    .cover h1 {
-      font-size: 38px; font-weight: 800; line-height: 1.15;
-      letter-spacing: -1px; margin-bottom: 10px;
-      background: linear-gradient(135deg, #fff 0%, #94d2ff 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .cover-subtitle { font-size: 16px; color: #94d2ff; margin-bottom: 40px; font-weight: 300; }
-    .repo-box {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 12px; padding: 16px 28px;
-      margin-bottom: 40px;
-      display: inline-flex; align-items: center; gap: 12px;
-    }
-    .repo-box span { font-size: 20px; }
-    .repo-box a { color: #7dd3fc; font-size: 13px; font-weight: 500; text-decoration: none; font-family: 'Fira Code', monospace; }
-    .cover-meta {
-      display: flex; gap: 40px; justify-content: center; flex-wrap: wrap;
-      border-top: 1px solid rgba(255,255,255,0.15);
-      padding-top: 30px; margin-top: 10px;
-    }
-    .cover-meta-item { text-align: center; }
-    .cover-meta-item .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; display: block; }
-    .cover-meta-item .value { font-size: 13px; font-weight: 600; color: #e2e8f0; }
-    .cover-divider {
-      width: 60px; height: 3px;
-      background: linear-gradient(90deg, var(--accent2), var(--gold));
-      border-radius: 2px; margin: 20px auto;
-    }
+/* ── Page wrapper ── */
+.page {
+  width: var(--paper-w);
+  min-height: 297mm;
+  margin: 12mm auto;
+  background: #ffffff;
+  padding: var(--margin-v) var(--margin-h);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  page-break-after: always;
+  position: relative;
+}
+.page:last-child { page-break-after: avoid; }
 
-    /* ══════════════════════════════
-       INNER PAGES
-    ══════════════════════════════ */
-    .inner { padding: 50px 60px; }
-    .section-header {
-      display: flex; align-items: center; gap: 14px;
-      border-bottom: 2px solid var(--border);
-      padding-bottom: 12px; margin-bottom: 24px;
-    }
-    .section-icon {
-      width: 40px; height: 40px; border-radius: 10px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
-    }
-    h2 { font-size: 22px; font-weight: 700; color: var(--primary); }
-    h3 { font-size: 15px; font-weight: 600; color: var(--primary); margin: 20px 0 8px; }
-    p { margin-bottom: 10px; color: #334155; }
+@media print {
+  body { background: #fff; }
+  .page {
+    margin: 0; box-shadow: none;
+    page-break-after: always;
+    width: 100%; min-height: 0;
+  }
+}
 
-    /* TOC */
-    .toc-list { list-style: none; counter-reset: toc; }
-    .toc-list li {
-      counter-increment: toc;
-      padding: 10px 0;
-      border-bottom: 1px dashed var(--border);
-      display: flex; align-items: center; gap: 12px;
-      font-size: 13px;
-    }
-    .toc-list li::before {
-      content: counter(toc, decimal-leading-zero);
-      font-size: 11px; font-weight: 700; color: var(--accent2);
-      background: #e0f2fe; border-radius: 6px;
-      padding: 2px 7px; flex-shrink: 0;
-    }
-    .toc-list li .title { flex: 1; font-weight: 500; color: var(--text); }
-    .toc-dots { flex: 1; border-bottom: 2px dotted #cbd5e1; margin: 0 8px; }
-    .toc-page { font-size: 11px; color: var(--muted); font-weight: 600; }
+/* ══════════════════
+   COVER PAGE
+══════════════════ */
+.cover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: 297mm;
+  padding: 20mm 28mm;
+}
 
-    /* CARDS */
-    .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
-    .card {
-      background: var(--light); border-radius: 12px;
-      padding: 18px; border: 1px solid var(--border);
-    }
-    .card-icon { font-size: 28px; margin-bottom: 8px; }
-    .card h4 { font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 4px; }
-    .card p { font-size: 11px; color: var(--muted); margin: 0; }
+.cover-institution {
+  font-family: var(--sans-font);
+  font-size: 10pt;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4pt;
+}
 
-    .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
-    .card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.cover-dept {
+  font-family: var(--sans-font);
+  font-size: 9pt;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 18pt;
+}
 
-    /* STAT BOXES */
-    .stat-row { display: flex; gap: 16px; margin: 20px 0; }
-    .stat-box {
-      flex: 1; text-align: center; padding: 20px 12px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-radius: 12px; color: #fff;
-    }
-    .stat-box .num { font-size: 32px; font-weight: 800; }
-    .stat-box .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+.cover-rule-top {
+  width: 100%;
+  border: none;
+  border-top: 2.5pt solid var(--accent);
+  margin-bottom: 2pt;
+}
+.cover-rule-thin {
+  width: 100%;
+  border: none;
+  border-top: 0.6pt solid var(--accent);
+  margin-bottom: 24pt;
+}
 
-    /* TABLE */
-    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 12px; }
-    thead tr { background: var(--primary); color: #fff; }
-    thead th { padding: 10px 14px; text-align: left; font-weight: 600; }
-    tbody tr:nth-child(even) { background: var(--light); }
-    tbody td { padding: 9px 14px; border-bottom: 1px solid var(--border); }
-    tbody tr:hover { background: #e0f2fe; }
+.cover-label {
+  font-family: var(--sans-font);
+  font-size: 8.5pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10pt;
+}
 
-    /* CODE BLOCK */
-    .code-block {
-      background: #0f172a; color: #e2e8f0;
-      border-radius: 10px; padding: 18px 20px;
-      font-family: 'Fira Code', monospace; font-size: 11px;
-      line-height: 1.8; margin: 14px 0; overflow-x: auto;
-    }
-    .code-block .kw  { color: #7dd3fc; }
-    .code-block .str { color: #86efac; }
-    .code-block .cm  { color: #64748b; }
-    .code-block .tag { color: #f9a8d4; }
+.cover-title {
+  font-family: var(--body-font);
+  font-size: 26pt;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.25;
+  margin-bottom: 6pt;
+  letter-spacing: -0.01em;
+}
 
-    /* BADGE */
-    .badge {
-      display: inline-block; padding: 2px 10px; border-radius: 20px;
-      font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .badge-blue  { background: #dbeafe; color: #1d4ed8; }
-    .badge-green { background: #dcfce7; color: #15803d; }
-    .badge-gold  { background: #fef3c7; color: #92400e; }
-    .badge-red   { background: #fee2e2; color: #b91c1c; }
+.cover-subtitle {
+  font-family: var(--body-font);
+  font-size: 12pt;
+  font-style: italic;
+  color: var(--muted);
+  margin-bottom: 24pt;
+}
 
-    /* FLOW */
-    .flow {
-      display: flex; align-items: center; gap: 0;
-      margin: 20px 0; flex-wrap: wrap;
-    }
-    .flow-step {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff; padding: 10px 18px; border-radius: 8px;
-      font-size: 11px; font-weight: 600; text-align: center; min-width: 90px;
-    }
-    .flow-arrow { font-size: 18px; color: var(--muted); padding: 0 6px; }
+.cover-rule-mid {
+  width: 60mm;
+  border: none;
+  border-top: 0.8pt solid var(--border);
+  margin: 0 auto 24pt;
+}
 
-    /* ALERT BOX */
-    .alert {
-      border-left: 4px solid var(--accent); background: #eff6ff;
-      border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 14px 0;
-      font-size: 12px; color: #1e40af;
-    }
-    .alert.success { border-color: #16a34a; background: #f0fdf4; color: #166534; }
-    .alert.warn    { border-color: var(--gold); background: #fffbeb; color: #92400e; }
+.cover-repo-block {
+  border: 0.6pt solid var(--border);
+  border-left: 3pt solid var(--accent);
+  background: var(--light-bg);
+  padding: 10pt 16pt;
+  margin-bottom: 28pt;
+  text-align: left;
+  width: 100%;
+}
+.cover-repo-block .repo-label {
+  font-family: var(--sans-font);
+  font-size: 7.5pt;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 4pt;
+}
+.cover-repo-block .repo-url {
+  font-family: var(--mono-font);
+  font-size: 9pt;
+  color: var(--accent);
+  word-break: break-all;
+}
 
-    /* DIR TREE */
-    .tree { font-family: 'Fira Code', monospace; font-size: 11px; line-height: 2; color: var(--text); }
-    .tree .folder { color: var(--accent); font-weight: 600; }
-    .tree .file   { color: #334155; }
-    .tree .note   { color: var(--muted); font-style: italic; }
+.cover-spacer { flex: 1; }
 
-    /* FOOTER */
-    .page-footer {
-      border-top: 1px solid var(--border); margin-top: 40px; padding-top: 14px;
-      display: flex; justify-content: space-between; font-size: 10px; color: var(--muted);
-    }
+/* Student Info Table */
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18pt;
+  font-family: var(--sans-font);
+  font-size: 9.5pt;
+}
+.student-table tr { border-top: 0.5pt solid var(--border); }
+.student-table tr:last-child { border-bottom: 0.5pt solid var(--border); }
+.student-table td { padding: 6pt 10pt; }
+.student-table .lbl { color: var(--muted); width: 40%; font-weight: 500; }
+.student-table .val { color: var(--text); font-weight: 600; }
 
-    /* CHAPTER HEADING */
-    .chapter-number {
-      font-size: 80px; font-weight: 800; color: #e2e8f0;
-      position: absolute; top: 10px; right: 30px; line-height: 1; z-index: 0;
-    }
-    .chapter-wrap { position: relative; }
-  </style>
+.cover-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 0.5pt solid var(--border);
+  width: 100%;
+  margin-bottom: 16pt;
+  font-family: var(--sans-font);
+}
+.cover-meta-cell {
+  padding: 8pt 10pt;
+  text-align: center;
+  border-right: 0.5pt solid var(--border);
+}
+.cover-meta-cell:last-child { border-right: none; }
+.cover-meta-cell .cm-label { font-size: 7pt; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); display: block; }
+.cover-meta-cell .cm-value { font-size: 9.5pt; font-weight: 600; color: var(--text); display: block; margin-top: 3pt; }
+
+.cover-rule-bot {
+  width: 100%;
+  border: none;
+  border-top: 0.6pt solid var(--accent);
+  margin-bottom: 2pt;
+}
+.cover-rule-thick-bot {
+  width: 100%;
+  border: none;
+  border-top: 2.5pt solid var(--accent);
+}
+
+/* ══════════════════
+   RUNNING HEADER / FOOTER
+══════════════════ */
+.page-header {
+  font-family: var(--sans-font);
+  font-size: 7.5pt;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.5pt solid var(--border);
+  padding-bottom: 5pt;
+  margin-bottom: 18pt;
+}
+
+.page-footer {
+  font-family: var(--sans-font);
+  font-size: 7.5pt;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 0.5pt solid var(--border);
+  padding-top: 5pt;
+  margin-top: 18pt;
+  position: absolute;
+  bottom: var(--margin-v);
+  left: var(--margin-h);
+  right: var(--margin-h);
+}
+
+/* ══════════════════
+   TYPOGRAPHY
+══════════════════ */
+h1 {
+  font-family: var(--body-font);
+  font-size: 15pt;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 18pt 0 6pt;
+  border-bottom: 1pt solid var(--border);
+  padding-bottom: 4pt;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-family: var(--body-font);
+  font-size: 12.5pt;
+  font-weight: 600;
+  color: var(--text);
+  margin: 14pt 0 5pt;
+}
+
+h3 {
+  font-family: var(--sans-font);
+  font-size: 10pt;
+  font-weight: 600;
+  color: var(--text);
+  margin: 10pt 0 4pt;
+  letter-spacing: 0.01em;
+}
+
+h4 {
+  font-family: var(--sans-font);
+  font-size: 9.5pt;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 8pt 0 3pt;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+p {
+  margin-bottom: 7pt;
+  text-align: justify;
+  font-size: 10.5pt;
+}
+
+/* ══════════════════
+   TABLE OF CONTENTS
+══════════════════ */
+.toc-entry {
+  display: flex;
+  align-items: baseline;
+  margin: 4pt 0;
+  font-size: 10.5pt;
+}
+.toc-num { 
+  color: var(--muted); 
+  min-width: 28pt; 
+  font-family: var(--sans-font);
+  font-size: 9pt;
+}
+.toc-title { flex: 1; }
+.toc-sub { padding-left: 18pt; color: var(--muted); font-size: 9.8pt; }
+.toc-leader { flex: 1; overflow: hidden; margin: 0 4pt; }
+.toc-leader::after { content: "..............................................................................................................."; color: var(--border); }
+.toc-page { font-family: var(--sans-font); font-size: 9pt; color: var(--muted); }
+
+/* ══════════════════
+   TABLES
+══════════════════ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10pt 0;
+  font-family: var(--sans-font);
+  font-size: 9pt;
+}
+thead tr {
+  background: var(--accent);
+  color: #ffffff;
+}
+thead th {
+  padding: 6pt 9pt;
+  text-align: left;
+  font-weight: 600;
+  font-size: 8.5pt;
+  letter-spacing: 0.03em;
+}
+tbody tr { border-bottom: 0.4pt solid var(--border); }
+tbody tr:nth-child(even) { background: #fafafa; }
+tbody td { padding: 5pt 9pt; vertical-align: top; }
+.table-caption {
+  font-family: var(--sans-font);
+  font-size: 8.5pt;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 4pt;
+  font-style: italic;
+}
+
+/* ══════════════════
+   CODE BLOCKS
+══════════════════ */
+.code-block {
+  background: var(--code-bg);
+  border: 0.5pt solid var(--border);
+  border-left: 2.5pt solid var(--accent);
+  border-radius: 1pt;
+  font-family: var(--mono-font);
+  font-size: 8pt;
+  line-height: 1.65;
+  padding: 10pt 14pt;
+  margin: 8pt 0;
+  overflow-x: auto;
+  white-space: pre;
+}
+.kw  { color: #1a3a6b; font-weight: 600; }
+.str { color: #2d6a2d; }
+.cm  { color: #888888; font-style: italic; }
+
+/* ══════════════════
+   DEFINITION / SPEC LIST
+══════════════════ */
+dl { margin: 6pt 0; }
+dt {
+  font-family: var(--sans-font);
+  font-size: 9.5pt;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 7pt;
+}
+dd {
+  font-size: 10pt;
+  color: #333;
+  margin-left: 16pt;
+  margin-bottom: 3pt;
+}
+
+/* ══════════════════
+   MISC BLOCKS
+══════════════════ */
+.note-box {
+  border: 0.5pt solid var(--border);
+  border-left: 3pt solid var(--accent);
+  background: var(--light-bg);
+  padding: 8pt 12pt;
+  margin: 10pt 0;
+  font-size: 9.5pt;
+  font-family: var(--sans-font);
+  color: #222;
+}
+.note-box strong { color: var(--accent); }
+
+.section-num {
+  font-family: var(--sans-font);
+  font-size: 8pt;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: block;
+  margin-bottom: 2pt;
+}
+
+/* inline code */
+code {
+  font-family: var(--mono-font);
+  font-size: 8.5pt;
+  background: var(--code-bg);
+  padding: 1pt 4pt;
+  border: 0.4pt solid var(--border);
+  border-radius: 2pt;
+}
+
+/* two-column layout */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14pt; margin: 8pt 0; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10pt; margin: 8pt 0; }
+
+.spec-card {
+  border: 0.5pt solid var(--border);
+  padding: 9pt;
+  font-family: var(--sans-font);
+  font-size: 9pt;
+}
+.spec-card .sc-head {
+  font-size: 8pt; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--accent); margin-bottom: 4pt;
+  border-bottom: 0.4pt solid var(--border); padding-bottom: 3pt;
+}
+.spec-card p { font-size: 9pt; margin: 0; text-align: left; }
+
+/* flow diagram */
+.flow-diagram {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; margin: 12pt 0; flex-wrap: wrap;
+}
+.flow-box {
+  border: 0.7pt solid var(--accent);
+  background: #edf2fb;
+  padding: 7pt 12pt;
+  font-family: var(--sans-font);
+  font-size: 8.5pt;
+  font-weight: 600;
+  color: var(--accent);
+  text-align: center;
+  min-width: 80pt;
+}
+.flow-arrow {
+  font-size: 14pt; color: var(--muted); padding: 0 4pt; line-height: 1;
+}
+
+/* status badge */
+.badge {
+  font-family: var(--sans-font);
+  font-size: 7.5pt;
+  font-weight: 600;
+  padding: 1pt 5pt;
+  border-radius: 2pt;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.badge-done   { background: #d4edda; color: #1a5c2a; border: 0.4pt solid #a3d0ab; }
+.badge-plan   { background: #fff3cd; color: #7d5a00; border: 0.4pt solid #f5d87a; }
+
+/* directory tree */
+.dir-tree {
+  font-family: var(--mono-font);
+  font-size: 8.2pt;
+  line-height: 1.7;
+  background: var(--code-bg);
+  border: 0.5pt solid var(--border);
+  border-left: 2.5pt solid var(--accent);
+  padding: 10pt 14pt;
+  margin: 8pt 0;
+}
+.dir-tree .dir  { color: var(--accent); font-weight: 600; }
+.dir-tree .cmt  { color: #888; font-style: italic; }
+
+ul.bullet { margin: 5pt 0 5pt 16pt; }
+ul.bullet li { font-size: 10pt; margin-bottom: 3pt; }
+</style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     PAGE 1 — COVER
-════════════════════════════════════════════ -->
+<!-- =====================================================================
+     PAGE 1 — COVER PAGE
+====================================================================== -->
 <div class="page cover">
-  <div class="cover-badge">🎓 Academic Project Report</div>
-  <div class="cover-icon">📚</div>
-  <h1>Library Management<br/>System</h1>
-  <p class="cover-subtitle">A full-stack web application built with ASP.NET Core 8 MVC &amp; SQL Server</p>
-  <div class="cover-divider"></div>
 
-  <div class="repo-box">
-    <span>🔗</span>
-    <div>
-      <div style="font-size:10px;color:#94a3b8;margin-bottom:4px;letter-spacing:1px;text-transform:uppercase;">GitHub Repository</div>
-      <a href="https://github.com/Kavyansh180/Library-Management-System">
-        github.com/Kavyansh180/Library-Management-System
-      </a>
+  <div style="width:100%;text-align:center;margin-bottom:12pt;">
+    <div class="cover-institution">Vellore Institute of Technology</div>
+    <div class="cover-dept">School of Computer Science and Engineering</div>
+  </div>
+
+  <hr class="cover-rule-top"/>
+  <hr class="cover-rule-thin"/>
+
+  <div class="cover-label">Capstone Project Report</div>
+
+  <div class="cover-title">Library Management System</div>
+  <div class="cover-subtitle">
+    A Full-Stack Web Application using ASP.NET Core 8 MVC and SQL Server
+  </div>
+
+  <hr class="cover-rule-mid"/>
+
+  <div class="cover-repo-block">
+    <div class="repo-label">Source Code Repository</div>
+    <div class="repo-url">https://github.com/Kavyansh180/Library-Management-System</div>
+  </div>
+
+  <div class="cover-spacer"></div>
+
+  <!-- Student Details -->
+  <div style="width:100%;margin-bottom:16pt;">
+    <h4 style="margin-bottom:6pt;border-bottom:0.5pt solid var(--border);padding-bottom:3pt;">Submitted By</h4>
+    <table class="student-table">
+      <tr>
+        <td class="lbl">Student Name</td>
+        <td class="val">Kavyansh Vats</td>
+      </tr>
+      <tr>
+        <td class="lbl">Application Number</td>
+        <td class="val">IN26013045</td>
+      </tr>
+      <tr>
+        <td class="lbl">Registration Number</td>
+        <td class="val">23BCE10301</td>
+      </tr>
+      <tr>
+        <td class="lbl">Programme</td>
+        <td class="val">B.Tech — Computer Science and Engineering</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Meta Grid -->
+  <div class="cover-meta-grid">
+    <div class="cover-meta-cell">
+      <span class="cm-label">Framework</span>
+      <span class="cm-value">ASP.NET Core 8</span>
+    </div>
+    <div class="cover-meta-cell">
+      <span class="cm-label">Database</span>
+      <span class="cm-value">SQL Server Express</span>
+    </div>
+    <div class="cover-meta-cell">
+      <span class="cm-label">Academic Year</span>
+      <span class="cm-value">2025 – 2026</span>
     </div>
   </div>
 
-  <div class="cover-meta">
-    <div class="cover-meta-item">
-      <span class="label">Framework</span>
-      <span class="value">ASP.NET Core 8</span>
-    </div>
-    <div class="cover-meta-item">
-      <span class="label">Language</span>
-      <span class="value">C# .NET 8.0</span>
-    </div>
-    <div class="cover-meta-item">
-      <span class="label">Database</span>
-      <span class="value">SQL Server Express</span>
-    </div>
-    <div class="cover-meta-item">
-      <span class="label">ORM</span>
-      <span class="value">Entity Framework Core 8</span>
-    </div>
-    <div class="cover-meta-item">
-      <span class="label">Year</span>
-      <span class="value">2026</span>
-    </div>
-  </div>
+  <hr class="cover-rule-bot"/>
+  <hr class="cover-rule-thick-bot"/>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     PAGE 2 — TABLE OF CONTENTS
-════════════════════════════════════════════ -->
-<div class="page inner">
-  <div class="section-header">
-    <div class="section-icon">📋</div>
-    <h2>Table of Contents</h2>
+
+<!-- =====================================================================
+     PAGE 2 — ABSTRACT + TABLE OF CONTENTS
+====================================================================== -->
+<div class="page">
+  <div class="page-header">
+    <span>Library Management System — Capstone Project Report</span>
+    <span>Kavyansh Vats &nbsp;|&nbsp; 23BCE10301</span>
   </div>
 
-  <ul class="toc-list">
-    <li><span class="title">Project Overview &amp; Objectives</span><span class="toc-dots"></span><span class="toc-page">3</span></li>
-    <li><span class="title">Technology Stack</span><span class="toc-dots"></span><span class="toc-page">3</span></li>
-    <li><span class="title">System Architecture</span><span class="toc-dots"></span><span class="toc-page">4</span></li>
-    <li><span class="title">Project Structure &amp; Directory Layout</span><span class="toc-dots"></span><span class="toc-page">4</span></li>
-    <li><span class="title">Database Design</span><span class="toc-dots"></span><span class="toc-page">5</span></li>
-    <li><span class="title">Modules &amp; Features</span><span class="toc-dots"></span><span class="toc-page">6</span></li>
-    <li><span class="title">Controllers &amp; Business Logic</span><span class="toc-dots"></span><span class="toc-page">7</span></li>
-    <li><span class="title">Views &amp; User Interface</span><span class="toc-dots"></span><span class="toc-page">8</span></li>
-    <li><span class="title">Setup &amp; Installation Guide</span><span class="toc-dots"></span><span class="toc-page">9</span></li>
-    <li><span class="title">Testing &amp; Verification</span><span class="toc-dots"></span><span class="toc-page">9</span></li>
-    <li><span class="title">Conclusion &amp; Future Scope</span><span class="toc-dots"></span><span class="toc-page">10</span></li>
-  </ul>
+  <h1>Abstract</h1>
+  <p>
+    This report presents the design, development, and deployment of a Library Management System (LMS) built as a full-stack web application using the ASP.NET Core 8 MVC framework and Microsoft SQL Server Express. The system provides an integrated digital platform for managing library resources including books, students, librarians, borrowing records, and publications such as newspapers and magazines.
+  </p>
+  <p>
+    The application follows the Model-View-Controller (MVC) architectural pattern, leveraging Entity Framework Core 8 as the Object-Relational Mapper for structured data access, supplemented by parameterised raw SQL queries for performance-critical operations. ASP.NET Core Identity is integrated for authentication infrastructure. The user interface is built with Bootstrap 5.3 and Razor view templates, delivering a responsive and browser-agnostic experience.
+  </p>
+  <p>
+    The project was developed, tested, and version-controlled using Git with the complete source code hosted on GitHub. All major modules — book cataloguing, borrowing and return workflow, student and librarian management, publications tracking, and a real-time statistical dashboard — were implemented and verified against a live SQL Server Express instance.
+  </p>
 
-  <div class="stat-row" style="margin-top:40px;">
-    <div class="stat-box"><div class="num">54</div><div class="lbl">Files Committed</div></div>
-    <div class="stat-box"><div class="num">8</div><div class="lbl">Controllers</div></div>
-    <div class="stat-box"><div class="num">6</div><div class="lbl">DB Tables</div></div>
-    <div class="stat-box"><div class="num">12</div><div class="lbl">Views Created</div></div>
-    <div class="stat-box"><div class="num">2</div><div class="lbl">Databases</div></div>
+  <div class="note-box" style="margin-top:10pt;">
+    <strong>Keywords:</strong> ASP.NET Core 8, MVC, Entity Framework Core, SQL Server, Library Management, C#, Razor Views, Bootstrap 5
   </div>
 
-  <div class="alert success" style="margin-top:30px;">
-    ✅ The project is fully functional, version-controlled and deployed locally at <strong>http://localhost:5000</strong>
-  </div>
+  <h1 style="margin-top:20pt;">Table of Contents</h1>
+
+  <div class="toc-entry"><span class="toc-num">1.</span><span class="toc-title">Introduction and Objectives</span><span class="toc-leader"></span><span class="toc-page">3</span></div>
+  <div class="toc-entry"><span class="toc-num">2.</span><span class="toc-title">Technology Stack</span><span class="toc-leader"></span><span class="toc-page">3</span></div>
+  <div class="toc-entry"><span class="toc-num">3.</span><span class="toc-title">System Architecture</span><span class="toc-leader"></span><span class="toc-page">4</span></div>
+  <div class="toc-entry"><span class="toc-num">4.</span><span class="toc-title">Project Structure</span><span class="toc-leader"></span><span class="toc-page">4</span></div>
+  <div class="toc-entry"><span class="toc-num">5.</span><span class="toc-title">Database Design</span><span class="toc-leader"></span><span class="toc-page">5</span></div>
+  <div class="toc-entry"><span class="toc-num">6.</span><span class="toc-title">Modules and Feature Description</span><span class="toc-leader"></span><span class="toc-page">6</span></div>
+  <div class="toc-entry"><span class="toc-num">7.</span><span class="toc-title">Controllers and Business Logic</span><span class="toc-leader"></span><span class="toc-page">7</span></div>
+  <div class="toc-entry"><span class="toc-num">8.</span><span class="toc-title">Views and User Interface</span><span class="toc-leader"></span><span class="toc-page">8</span></div>
+  <div class="toc-entry"><span class="toc-num">9.</span><span class="toc-title">Setup and Installation Guide</span><span class="toc-leader"></span><span class="toc-page">9</span></div>
+  <div class="toc-entry"><span class="toc-num">10.</span><span class="toc-title">Testing and Verification</span><span class="toc-leader"></span><span class="toc-page">9</span></div>
+  <div class="toc-entry"><span class="toc-num">11.</span><span class="toc-title">Conclusion and Future Scope</span><span class="toc-leader"></span><span class="toc-page">10</span></div>
 
   <div class="page-footer">
-    <span>Library Management System — Project Report</span>
-    <span>github.com/Kavyansh180/Library-Management-System</span>
+    <span>Capstone Project Report</span>
+    <span>Library Management System</span>
     <span>Page 2</span>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     PAGE 3 — OVERVIEW + TECH STACK
-════════════════════════════════════════════ -->
-<div class="page inner">
-  <div class="section-header">
-    <div class="section-icon">🎯</div>
-    <h2>1. Project Overview &amp; Objectives</h2>
+
+<!-- =====================================================================
+     PAGE 3 — INTRODUCTION + TECH STACK
+====================================================================== -->
+<div class="page">
+  <div class="page-header">
+    <span>Library Management System — Capstone Project Report</span>
+    <span>Kavyansh Vats &nbsp;|&nbsp; 23BCE10301</span>
   </div>
 
-  <p>The <strong>Library Management System (LMS)</strong> is a web-based application developed using the ASP.NET Core 8 MVC framework. It provides a comprehensive solution for managing library resources including books, students, librarians, borrowing records, and publications such as newspapers and magazines.</p>
-  <p>The system was developed to digitize and automate the day-to-day operations of a library, replacing manual record-keeping with a fast, reliable, and user-friendly interface accessible from any modern web browser.</p>
+  <span class="section-num">Section 1</span>
+  <h1>Introduction and Objectives</h1>
 
-  <h3>Key Objectives</h3>
-  <div class="card-grid">
-    <div class="card"><div class="card-icon">📖</div><h4>Book Management</h4><p>Add, edit, delete and search books with availability tracking.</p></div>
-    <div class="card"><div class="card-icon">🎓</div><h4>Student Records</h4><p>Maintain student profiles with search and pagination support.</p></div>
-    <div class="card"><div class="card-icon">👔</div><h4>Librarian Management</h4><p>Full CRUD operations for librarian staff records.</p></div>
-    <div class="card"><div class="card-icon">🔄</div><h4>Borrow &amp; Return</h4><p>Issue books to students and track return dates.</p></div>
-    <div class="card"><div class="card-icon">📰</div><h4>Publications</h4><p>Manage newspapers and magazines separately from books.</p></div>
-    <div class="card"><div class="card-icon">📊</div><h4>Dashboard</h4><p>Real-time summary of all library statistics in one view.</p></div>
-  </div>
+  <p>
+    Traditional library management relies heavily on manual record-keeping processes that are error-prone, time-consuming, and difficult to scale. This project addresses those challenges by delivering a fully digital, web-based Library Management System that automates the core administrative functions of a library.
+  </p>
+  <p>
+    The system is accessible through any standard web browser, requires no client-side installation, and is backed by a robust relational database. It centralises the management of books, student and librarian records, borrowing and return workflows, and publication archives within a single, cohesive platform.
+  </p>
 
-  <div class="section-header" style="margin-top:30px;">
-    <div class="section-icon">🛠️</div>
-    <h2>2. Technology Stack</h2>
-  </div>
+  <h2>1.1 Objectives</h2>
+  <ul class="bullet">
+    <li>Design and implement a multi-module web application using the ASP.NET Core 8 MVC pattern.</li>
+    <li>Provide complete CRUD (Create, Read, Update, Delete) functionality for books, students, librarians, and publications.</li>
+    <li>Implement a borrowing and return workflow with real-time availability tracking.</li>
+    <li>Deliver a real-time administrative dashboard aggregating statistics from all modules.</li>
+    <li>Integrate ASP.NET Core Identity for secure authentication infrastructure.</li>
+    <li>Manage source code with Git and publish to a public GitHub repository.</li>
+    <li>Ensure the system is maintainable, extensible, and follows software engineering best practices.</li>
+  </ul>
+
+  <h2>1.2 Scope</h2>
+  <p>
+    The scope of this capstone project encompasses the full software development lifecycle including requirements analysis, system design, implementation, database migration, testing, and version control. The system was developed and tested on a Windows environment with .NET 8.0 SDK and SQL Server Express 2017.
+  </p>
+
+  <span class="section-num" style="margin-top:18pt;">Section 2</span>
+  <h1>Technology Stack</h1>
 
   <table>
-    <thead><tr><th>Layer</th><th>Technology</th><th>Version</th><th>Purpose</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Technology</th>
+        <th>Version</th>
+        <th>Role</th>
+      </tr>
+    </thead>
     <tbody>
-      <tr><td>Backend Framework</td><td>ASP.NET Core MVC</td><td>8.0</td><td>Web application framework</td></tr>
-      <tr><td>Programming Language</td><td>C#</td><td>.NET 8.0</td><td>Application logic</td></tr>
-      <tr><td>ORM</td><td>Entity Framework Core</td><td>8.0.0</td><td>Database access for Books, BorrowRecords, Publications</td></tr>
-      <tr><td>Authentication</td><td>ASP.NET Core Identity</td><td>8.0.0</td><td>User management &amp; identity tables</td></tr>
-      <tr><td>Database</td><td>SQL Server Express</td><td>2017</td><td>Primary data store</td></tr>
-      <tr><td>Raw SQL</td><td>Microsoft.Data.SqlClient</td><td>5.1.1</td><td>Students &amp; Librarians queries</td></tr>
-      <tr><td>Frontend CSS</td><td>Bootstrap</td><td>5.3.0</td><td>Responsive UI components</td></tr>
-      <tr><td>Frontend JS</td><td>jQuery</td><td>3.6.0</td><td>Client-side interactivity</td></tr>
-      <tr><td>Version Control</td><td>Git / GitHub</td><td>—</td><td>Source code management</td></tr>
+      <tr><td>Backend Framework</td><td>ASP.NET Core MVC</td><td>8.0</td><td>Web application and routing framework</td></tr>
+      <tr><td>Programming Language</td><td>C#</td><td>.NET 8.0</td><td>Application business logic</td></tr>
+      <tr><td>ORM</td><td>Entity Framework Core</td><td>8.0.0</td><td>Data access for Books, BorrowRecords, Publications</td></tr>
+      <tr><td>Identity</td><td>ASP.NET Core Identity</td><td>8.0.0</td><td>User authentication and role infrastructure</td></tr>
+      <tr><td>Raw Data Access</td><td>Microsoft.Data.SqlClient</td><td>5.1.1</td><td>Parameterised SQL for Students and Librarians</td></tr>
+      <tr><td>Database</td><td>SQL Server Express</td><td>2017 / 2022</td><td>Primary relational data store</td></tr>
+      <tr><td>Scaffolding</td><td>Microsoft.VisualStudio.Web.CodeGeneration.Design</td><td>8.0.0</td><td>Controller and view scaffolding</td></tr>
+      <tr><td>Frontend</td><td>Bootstrap</td><td>5.3.0 (CDN)</td><td>Responsive UI layout and components</td></tr>
+      <tr><td>Frontend</td><td>jQuery</td><td>3.6.0 (CDN)</td><td>DOM manipulation and AJAX support</td></tr>
+      <tr><td>Templating</td><td>Razor (.cshtml)</td><td>Built-in</td><td>Server-side HTML rendering</td></tr>
+      <tr><td>Version Control</td><td>Git / GitHub</td><td>—</td><td>Source code management and collaboration</td></tr>
+      <tr><td>Development Runtime</td><td>Kestrel (dotnet run)</td><td>Built-in</td><td>Cross-platform HTTP server</td></tr>
     </tbody>
   </table>
+  <p class="table-caption">Table 2.1: Full technology stack of the Library Management System</p>
 
   <div class="page-footer">
-    <span>Library Management System — Project Report</span>
-    <span>github.com/Kavyansh180/Library-Management-System</span>
+    <span>Capstone Project Report</span>
+    <span>Library Management System</span>
     <span>Page 3</span>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     PAGE 4 — ARCHITECTURE + DIRECTORY
-════════════════════════════════════════════ -->
-<div class="page inner">
-  <div class="section-header">
-    <div class="section-icon">🏗️</div>
-    <h2>3. System Architecture</h2>
+
+<!-- =====================================================================
+     PAGE 4 — ARCHITECTURE + STRUCTURE
+====================================================================== -->
+<div class="page">
+  <div class="page-header">
+    <span>Library Management System — Capstone Project Report</span>
+    <span>Kavyansh Vats &nbsp;|&nbsp; 23BCE10301</span>
   </div>
 
-  <p>The application follows the <strong>Model-View-Controller (MVC)</strong> architectural pattern, separating concerns clearly across three layers:</p>
+  <span class="section-num">Section 3</span>
+  <h1>System Architecture</h1>
 
-  <div class="flow" style="justify-content:center;margin:24px 0;">
-    <div class="flow-step">🌐 Browser<br/><small>HTTP Request</small></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step">🎮 Controller<br/><small>Route Handler</small></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step">🗃️ Model / EF<br/><small>Business Logic</small></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-step">🗄️ SQL Server<br/><small>Data Store</small></div>
-    <div class="flow-arrow">↩</div>
-    <div class="flow-step">🖼️ View (.cshtml)<br/><small>Razor Response</small></div>
+  <p>
+    The application adheres strictly to the Model-View-Controller (MVC) architectural pattern enforced by the ASP.NET Core framework. This pattern enforces a clean separation of concerns: the Model layer encapsulates domain entities and data access logic; the View layer contains Razor templates responsible solely for HTML rendering; and the Controller layer handles HTTP request routing, orchestrates data retrieval, and selects the appropriate view response.
+  </p>
+
+  <h2>3.1 Request-Response Flow</h2>
+  <div class="flow-diagram">
+    <div class="flow-box">Browser<br/><small>HTTP Request</small></div>
+    <div class="flow-arrow">&#8594;</div>
+    <div class="flow-box">Kestrel<br/><small>Web Server</small></div>
+    <div class="flow-arrow">&#8594;</div>
+    <div class="flow-box">Middleware<br/><small>Auth / Routing</small></div>
+    <div class="flow-arrow">&#8594;</div>
+    <div class="flow-box">Controller<br/><small>Action Method</small></div>
+    <div class="flow-arrow">&#8594;</div>
+    <div class="flow-box">Model / EF<br/><small>Data Layer</small></div>
+    <div class="flow-arrow">&#8594;</div>
+    <div class="flow-box">SQL Server<br/><small>Database</small></div>
   </div>
+  <p style="text-align:center;font-size:8.5pt;color:var(--muted);font-family:var(--sans-font);margin-top:2pt;">Figure 3.1: Application request-response flow</p>
 
-  <div class="card-grid card-grid-2" style="margin-top:10px;">
-    <div class="card">
-      <h4>📥 Request Flow</h4>
-      <p style="font-size:11px;">A browser request hits the Kestrel web server → Routing middleware maps it to the correct controller action → The action fetches data from the database via EF Core or raw SQL → A Razor view renders HTML → Response sent back to browser.</p>
-    </div>
-    <div class="card">
-      <h4>🗄️ Dual Database Strategy</h4>
-      <p style="font-size:11px;"><strong>LMS</strong> database stores Books, BorrowRecords, Publications, Students and Librarians. <strong>IdentityCoreDB</strong> stores ASP.NET Identity tables (AspNetUsers, AspNetRoles, etc.). Both connect to SQL Server Express via <code>appsettings.json</code>.</p>
-    </div>
-  </div>
+  <h2>3.2 Data Access Strategy</h2>
+  <p>
+    The project employs a dual data access strategy. Entity Framework Core is used for the <code>Books13</code>, <code>BorrowRecords13</code>, and <code>Publications</code> tables, where the ORM's change tracking and relationship navigation provide productivity benefits. For the <code>Students</code> and <code>Librarians</code> tables, parameterised raw SQL via <code>Microsoft.Data.SqlClient</code> is used directly, demonstrating proficiency with both abstracted and explicit database interaction patterns.
+  </p>
 
-  <div class="section-header" style="margin-top:30px;">
-    <div class="section-icon">📁</div>
-    <h2>4. Project Structure</h2>
-  </div>
+  <h2>3.3 Dependency Injection</h2>
+  <p>
+    ASP.NET Core's built-in Dependency Injection container is used to register and resolve services. Both <code>LibraryContext</code> and <code>ApplicationDbContext</code> are registered as scoped services in <code>Program.cs</code>, along with the Identity services. Configuration values (connection strings) are injected into controllers via <code>IConfiguration</code>.
+  </p>
 
-  <div class="code-block">
-<span class="folder">LMSystem/</span>
-├── <span class="folder">Controllers/</span>         <span class="cm">← 8 MVC controllers (request handlers)</span>
-│   ├── BooksController.cs
-│   ├── BorrowController.cs
-│   ├── DashboardController.cs
-│   ├── HomeController.cs
-│   ├── LibrarianController.cs
-│   ├── LoginController.cs
-│   ├── PublicationsController.cs
-│   └── StudentController.cs
-├── <span class="folder">Data/</span>                <span class="cm">← EF Core DbContext classes</span>
-│   ├── ApplicationDbContext.cs   <span class="cm">← ASP.NET Identity</span>
-│   └── LibraryContext.cs         <span class="cm">← Books, BorrowRecords, Publications</span>
-├── <span class="folder">Migrations/</span>          <span class="cm">← EF Core migration files</span>
-│   ├── Identity/
-│   └── Library/
-├── <span class="folder">Models/</span>              <span class="cm">← 7 domain model classes</span>
-│   ├── Book.cs  |  BorrowRecord.cs  |  DashboardModel.cs
-│   ├── LibrarianModel.cs  |  LoginModel.cs
-│   ├── Publication.cs  |  StudentModel.cs
-├── <span class="folder">ViewModels/</span>          <span class="cm">← 5 view-specific models</span>
-├── <span class="folder">Views/</span>               <span class="cm">← 17 Razor (.cshtml) views</span>
-│   ├── Books/Home/Login/Dashboard/Borrow/
-│   ├── Librarian/Student/Publications/
-│   └── Shared/ (_Layout, Error, NotFound …)
-├── <span class="folder">wwwroot/</span>             <span class="cm">← Static files (CSS, JS, images)</span>
-├── Program.cs               <span class="cm">← App bootstrap & DI configuration</span>
-└── appsettings.json         <span class="cm">← Connection strings & logging</span>
+  <span class="section-num" style="margin-top:18pt;">Section 4</span>
+  <h1>Project Structure</h1>
+
+  <div class="dir-tree">
+<span class="dir">Library-Management-System/</span>
+|-- <span class="dir">LMSystem/</span>                        <span class="cmt">ASP.NET Core 8 MVC Project</span>
+|   |-- <span class="dir">Controllers/</span>                 <span class="cmt">8 controller classes</span>
+|   |   |-- BooksController.cs
+|   |   |-- BorrowController.cs
+|   |   |-- DashboardController.cs
+|   |   |-- HomeController.cs
+|   |   |-- LibrarianController.cs
+|   |   |-- LoginController.cs
+|   |   |-- PublicationsController.cs
+|   |   `-- StudentController.cs
+|   |-- <span class="dir">Data/</span>                        <span class="cmt">EF Core DbContext definitions</span>
+|   |   |-- ApplicationDbContext.cs  <span class="cmt">ASP.NET Identity context</span>
+|   |   `-- LibraryContext.cs        <span class="cmt">Library domain context</span>
+|   |-- <span class="dir">Migrations/</span>                  <span class="cmt">EF Core migration files</span>
+|   |   |-- <span class="dir">Identity/</span>                <span class="cmt">IdentityCoreDB migrations</span>
+|   |   `-- <span class="dir">Library/</span>                 <span class="cmt">LMS database migrations</span>
+|   |-- <span class="dir">Models/</span>                      <span class="cmt">7 domain model classes</span>
+|   |-- <span class="dir">ViewModels/</span>                  <span class="cmt">5 view-specific model classes</span>
+|   |-- <span class="dir">Views/</span>                       <span class="cmt">17 Razor view templates (.cshtml)</span>
+|   |-- <span class="dir">wwwroot/</span>                     <span class="cmt">Static assets (CSS, JS, images)</span>
+|   |-- Program.cs                   <span class="cmt">Application bootstrap and DI setup</span>
+|   |-- LMSystem.csproj              <span class="cmt">Project file and NuGet references</span>
+|   `-- appsettings.json             <span class="cmt">Connection strings and logging config</span>
+|-- .gitignore
+`-- Library_Management_System_Report.pdf
   </div>
 
   <div class="page-footer">
-    <span>Library Management System — Project Report</span>
-    <span>github.com/Kavyansh180/Library-Management-System</span>
+    <span>Capstone Project Report</span>
+    <span>Library Management System</span>
     <span>Page 4</span>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
+
+<!-- =====================================================================
      PAGE 5 — DATABASE DESIGN
-════════════════════════════════════════════ -->
-<div class="page inner">
-  <div class="section-header">
-    <div class="section-icon">🗄️</div>
-    <h2>5. Database Design</h2>
+====================================================================== -->
+<div class="page">
+  <div class="page-header">
+    <span>Library Management System — Capstone Project Report</span>
+    <span>Kavyansh Vats &nbsp;|&nbsp; 23BCE10301</span>
   </div>
 
-  <p>The project uses <strong>two SQL Server Express databases</strong> managed via Entity Framework Core migrations and raw SQL commands.</p>
+  <span class="section-num">Section 5</span>
+  <h1>Database Design</h1>
 
-  <h3>Database 1: LMS (Library Data)</h3>
+  <p>
+    The system uses two SQL Server Express databases managed through distinct strategies. The <strong>LMS</strong> database holds all library domain data; the <strong>IdentityCoreDB</strong> database holds ASP.NET Core Identity tables generated automatically via EF Core migrations.
+  </p>
+
+  <h2>5.1 LMS Database — Table Definitions</h2>
+
+  <h3>Table: Books13</h3>
   <table>
-    <thead><tr><th>Table</th><th>Column</th><th>Type</th><th>Description</th></tr></thead>
+    <thead><tr><th>Column</th><th>Data Type</th><th>Constraints</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td rowspan="6"><strong>Books13</strong></td><td>BookId (PK)</td><td>INT IDENTITY</td><td>Primary key</td></tr>
-      <tr><td>Title</td><td>NVARCHAR</td><td>Book title</td></tr>
-      <tr><td>Author</td><td>NVARCHAR</td><td>Author name</td></tr>
-      <tr><td>ISBN</td><td>NVARCHAR</td><td>ISBN number</td></tr>
-      <tr><td>PublishedDate</td><td>DATETIME2</td><td>Publication date</td></tr>
-      <tr><td>IsAvailable</td><td>BIT</td><td>Availability flag (true/false)</td></tr>
-
-      <tr><td rowspan="6"><strong>BorrowRecords13</strong></td><td>BorrowRecordId (PK)</td><td>INT IDENTITY</td><td>Primary key</td></tr>
-      <tr><td>BookId (FK)</td><td>INT</td><td>References Books13</td></tr>
-      <tr><td>BorrowerName</td><td>NVARCHAR</td><td>Student name</td></tr>
-      <tr><td>BorrowerEmail</td><td>NVARCHAR</td><td>Student email</td></tr>
-      <tr><td>BorrowDate</td><td>DATETIME2</td><td>Date borrowed</td></tr>
-      <tr><td>ReturnDate</td><td>DATETIME2?</td><td>Date returned (nullable)</td></tr>
-
-      <tr><td rowspan="5"><strong>Publications</strong></td><td>Id (PK)</td><td>INT IDENTITY</td><td>Primary key</td></tr>
-      <tr><td>Title</td><td>NVARCHAR</td><td>Publication title</td></tr>
-      <tr><td>Publisher</td><td>NVARCHAR</td><td>Publisher name</td></tr>
-      <tr><td>PublishedDate</td><td>DATETIME2</td><td>Date published</td></tr>
-      <tr><td>Type</td><td>INT (Enum)</td><td>0 = Newspaper, 1 = Magazine</td></tr>
-
-      <tr><td rowspan="4"><strong>Students</strong></td><td>StudentId (PK)</td><td>INT IDENTITY</td><td>Primary key</td></tr>
-      <tr><td>Name</td><td>NVARCHAR(100)</td><td>Student name</td></tr>
-      <tr><td>Age</td><td>INT</td><td>Student age</td></tr>
-      <tr><td>Phone</td><td>NVARCHAR(20)</td><td>Contact number</td></tr>
-
-      <tr><td rowspan="4"><strong>Librarians</strong></td><td>LibrarianId (PK)</td><td>INT IDENTITY</td><td>Primary key</td></tr>
-      <tr><td>Name</td><td>NVARCHAR(100)</td><td>Librarian name</td></tr>
-      <tr><td>Age</td><td>INT</td><td>Age</td></tr>
-      <tr><td>Phone</td><td>NVARCHAR(20)</td><td>Contact phone</td></tr>
+      <tr><td>BookId</td><td>INT</td><td>PRIMARY KEY, IDENTITY(1,1)</td><td>Unique identifier for each book</td></tr>
+      <tr><td>Title</td><td>NVARCHAR(MAX)</td><td>NULL</td><td>Title of the book</td></tr>
+      <tr><td>Author</td><td>NVARCHAR(MAX)</td><td>NULL</td><td>Author name</td></tr>
+      <tr><td>ISBN</td><td>NVARCHAR(MAX)</td><td>NULL</td><td>International Standard Book Number</td></tr>
+      <tr><td>PublishedDate</td><td>DATETIME2</td><td>NOT NULL</td><td>Date of publication</td></tr>
+      <tr><td>IsAvailable</td><td>BIT</td><td>NOT NULL, DEFAULT 1</td><td>Availability flag; 0 when borrowed</td></tr>
     </tbody>
   </table>
 
-  <h3>Database 2: IdentityCoreDB (ASP.NET Identity)</h3>
-  <div class="card-grid card-grid-4">
-    <div class="card"><div class="card-icon">👤</div><h4>AspNetUsers</h4><p>User accounts with hashed passwords</p></div>
-    <div class="card"><div class="card-icon">🎭</div><h4>AspNetRoles</h4><p>Role definitions (e.g. Admin)</p></div>
-    <div class="card"><div class="card-icon">🔗</div><h4>AspNetUserRoles</h4><p>User ↔ Role mapping</p></div>
-    <div class="card"><div class="card-icon">🎫</div><h4>AspNetUserTokens</h4><p>Auth tokens &amp; refresh tokens</p></div>
-  </div>
+  <h3>Table: BorrowRecords13</h3>
+  <table>
+    <thead><tr><th>Column</th><th>Data Type</th><th>Constraints</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>BorrowRecordId</td><td>INT</td><td>PRIMARY KEY, IDENTITY(1,1)</td><td>Unique borrow record identifier</td></tr>
+      <tr><td>BookId</td><td>INT</td><td>FOREIGN KEY -&gt; Books13(BookId)</td><td>Book being borrowed</td></tr>
+      <tr><td>BorrowerName</td><td>NVARCHAR(MAX)</td><td>NULL</td><td>Full name of the borrower</td></tr>
+      <tr><td>BorrowerEmail</td><td>NVARCHAR(MAX)</td><td>NULL</td><td>Email address of the borrower</td></tr>
+      <tr><td>Phone</td><td>NVARCHAR(MAX)</td><td>NULL</td><td>Contact phone number</td></tr>
+      <tr><td>BorrowDate</td><td>DATETIME2</td><td>NOT NULL, DEFAULT UTC</td><td>Date and time of borrowing</td></tr>
+      <tr><td>ReturnDate</td><td>DATETIME2</td><td>NULL</td><td>Date returned; NULL until book is returned</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Table: Publications</h3>
+  <table>
+    <thead><tr><th>Column</th><th>Data Type</th><th>Constraints</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>Id</td><td>INT</td><td>PRIMARY KEY, IDENTITY(1,1)</td><td>Unique publication identifier</td></tr>
+      <tr><td>Title</td><td>NVARCHAR(MAX)</td><td>NULL</td><td>Publication title</td></tr>
+      <tr><td>Publisher</td><td>NVARCHAR(MAX)</td><td>NULL</td><td>Publisher name</td></tr>
+      <tr><td>PublishedDate</td><td>DATETIME2</td><td>NOT NULL</td><td>Date of publication</td></tr>
+      <tr><td>Type</td><td>INT</td><td>NOT NULL</td><td>Enum: 0 = Newspaper, 1 = Magazine</td></tr>
+      <tr><td>IsAvailable</td><td>BIT</td><td>NOT NULL</td><td>Availability status</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Table: Students</h3>
+  <table>
+    <thead><tr><th>Column</th><th>Data Type</th><th>Constraints</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>StudentId</td><td>INT</td><td>PRIMARY KEY, IDENTITY(1,1)</td><td>Unique student identifier</td></tr>
+      <tr><td>Name</td><td>NVARCHAR(100)</td><td>NOT NULL</td><td>Full name of the student</td></tr>
+      <tr><td>Age</td><td>INT</td><td>NOT NULL</td><td>Age of the student</td></tr>
+      <tr><td>Phone</td><td>NVARCHAR(20)</td><td>NOT NULL</td><td>Contact phone number</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Table: Librarians</h3>
+  <table>
+    <thead><tr><th>Column</th><th>Data Type</th><th>Constraints</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>LibrarianId</td><td>INT</td><td>PRIMARY KEY, IDENTITY(1,1)</td><td>Unique librarian identifier</td></tr>
+      <tr><td>Name</td><td>NVARCHAR(100)</td><td>NOT NULL</td><td>Full name</td></tr>
+      <tr><td>Age</td><td>INT</td><td>NOT NULL</td><td>Age</td></tr>
+      <tr><td>Phone</td><td>NVARCHAR(20)</td><td>NOT NULL</td><td>Contact phone number</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="margin-top:10pt;">5.2 IdentityCoreDB — ASP.NET Identity Tables</h2>
+  <p>
+    The identity database is created and managed entirely by EF Core migrations. Key tables include <code>AspNetUsers</code> (user accounts with hashed passwords), <code>AspNetRoles</code> (role definitions), <code>AspNetUserRoles</code> (user-role mapping), <code>AspNetUserClaims</code>, <code>AspNetUserLogins</code>, and <code>AspNetUserTokens</code>.
+  </p>
 
   <div class="page-footer">
-    <span>Library Management System — Project Report</span>
-    <span>github.com/Kavyansh180/Library-Management-System</span>
+    <span>Capstone Project Report</span>
+    <span>Library Management System</span>
     <span>Page 5</span>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
+
+<!-- =====================================================================
      PAGE 6 — MODULES & FEATURES
-════════════════════════════════════════════ -->
-<div class="page inner">
-  <div class="section-header">
-    <div class="section-icon">⚙️</div>
-    <h2>6. Modules &amp; Features</h2>
+====================================================================== -->
+<div class="page">
+  <div class="page-header">
+    <span>Library Management System — Capstone Project Report</span>
+    <span>Kavyansh Vats &nbsp;|&nbsp; 23BCE10301</span>
   </div>
 
-  <h3>Module 1 — Book Management <span class="badge badge-blue">BooksController</span></h3>
-  <p>Full CRUD operations for managing library books. Each book tracks its availability status. When a book is borrowed its <code>IsAvailable</code> flag is set to <code>false</code> and restored on return. Features include paginated listing, search, add/edit/delete with EF Core and antiforgery token protection.</p>
+  <span class="section-num">Section 6</span>
+  <h1>Modules and Feature Description</h1>
 
-  <h3>Module 2 — Borrow &amp; Return System <span class="badge badge-green">BorrowController</span></h3>
-  <p>Students can borrow available books by providing their name, email and phone. The system validates availability before issuing. On return, the <code>ReturnDate</code> is recorded and the book is marked available again. Both operations use EF Core transactions.</p>
+  <h2>6.1 Book Management Module</h2>
+  <p>
+    Managed by <code>BooksController</code> using Entity Framework Core and the <code>LibraryContext</code>. Provides full CRUD operations: listing all books with paginated output, searching by title or author, adding new book entries, editing existing records, and deletion with cascade effect on associated borrow records. Each book's <code>IsAvailable</code> flag is toggled automatically during borrow and return transactions.
+  </p>
 
-  <h3>Module 3 — Student Management <span class="badge badge-blue">StudentController</span></h3>
-  <p>Manages enrolled student records using raw SQL via <code>SqlConnection</code>. Supports search by name and paginated listing with 5 records per page. CRUD operations available.</p>
+  <h2>6.2 Borrow and Return Workflow</h2>
+  <p>
+    Managed by <code>BorrowController</code> using async EF Core operations. When a student borrows a book, the system verifies the book exists and its <code>IsAvailable</code> flag is <code>true</code>. A <code>BorrowRecord</code> is created, and the book is marked unavailable. On return, <code>ReturnDate</code> is set to the current UTC timestamp and the book is re-marked as available. All operations are protected by AntiForgery tokens.
+  </p>
 
-  <h3>Module 4 — Librarian Management <span class="badge badge-green">LibrarianController</span></h3>
-  <p>Full CRUD for library staff. Uses raw SQL with parameterized queries to prevent SQL injection. Supports name search with server-side pagination.</p>
+  <h2>6.3 Student Management Module</h2>
+  <p>
+    Managed by <code>StudentController</code> using raw parameterised SQL via <code>SqlConnection</code>. Supports server-side search filtering by name and paginated listing (5 records per page) using SQL <code>OFFSET / FETCH NEXT</code> syntax to prevent SQL injection.
+  </p>
 
-  <h3>Module 5 — Publications <span class="badge badge-gold">PublicationsController</span></h3>
-  <p>Manages two types of publications — <strong>Newspapers</strong> and <strong>Magazines</strong> — differentiated by a <code>PublicationType</code> enum. Uses EF Core with filtered queries and pagination.</p>
+  <h2>6.4 Librarian Management Module</h2>
+  <p>
+    Managed by <code>LibrarianController</code> with raw SQL and <code>IConfiguration</code>-injected connection strings. Full CRUD is supported: listing with pagination, name-based search, create, edit, and delete via direct SQL statements with parameterised values.
+  </p>
 
-  <h3>Module 6 — Dashboard <span class="badge badge-blue">DashboardController</span></h3>
-  <p>Provides an aggregated statistical view: total books, students, librarians, borrowings and publications. Reads counts from all 5 tables using raw SQL with graceful error handling (try/catch per query).</p>
+  <h2>6.5 Publications Module</h2>
+  <p>
+    Managed by <code>PublicationsController</code> using EF Core with the <code>Publication</code> entity. Publications are categorised by a <code>PublicationType</code> enum (0 = Newspaper, 1 = Magazine). The index view accepts a <code>type</code> query parameter and filters accordingly. Pagination is implemented server-side.
+  </p>
 
-  <h3>Module 7 — Authentication <span class="badge badge-red">LoginController</span></h3>
-  <p>Handles user login with hardcoded demo credentials (<code>admin/12345</code>). On success redirects to the Dashboard. Integrates with ASP.NET Core Identity middleware for authentication pipeline support.</p>
+  <h2>6.6 Dashboard Module</h2>
+  <p>
+    Managed by <code>DashboardController</code> using raw SQL scalar queries across all five data tables. Each count query is enclosed in an individual <code>try-catch</code> block to ensure partial data still renders if a single table query fails. Connection strings are injected via <code>IConfiguration</code>.
+  </p>
 
-  <h3>Feature Summary</h3>
+  <h2>6.7 Authentication Module</h2>
+  <p>
+    Managed by <code>LoginController</code>. Provides a login form and verifies credentials against an in-memory list (suitable for demonstration purposes). On successful authentication, the user is redirected to the dashboard. The ASP.NET Core Identity middleware pipeline (<code>UseAuthentication</code>, <code>UseAuthorization</code>) is fully configured in <code>Program.cs</code> for future extension.
+  </p>
+
+  <h2>6.8 Feature Completion Summary</h2>
   <table>
-    <thead><tr><th>Feature</th><th>Status</th><th>Notes</th></tr></thead>
+    <thead><tr><th>Feature</th><th>Controller</th><th>Data Access</th><th>Status</th></tr></thead>
     <tbody>
-      <tr><td>Book CRUD</td><td><span class="badge badge-green">✅ Done</span></td><td>With EF Core, search, pagination</td></tr>
-      <tr><td>Borrow / Return</td><td><span class="badge badge-green">✅ Done</span></td><td>Availability flag management</td></tr>
-      <tr><td>Student CRUD</td><td><span class="badge badge-green">✅ Done</span></td><td>Raw SQL, search, pagination</td></tr>
-      <tr><td>Librarian CRUD</td><td><span class="badge badge-green">✅ Done</span></td><td>Raw SQL, search, pagination</td></tr>
-      <tr><td>Publications</td><td><span class="badge badge-green">✅ Done</span></td><td>Newspaper &amp; Magazine filtering</td></tr>
-      <tr><td>Dashboard</td><td><span class="badge badge-green">✅ Done</span></td><td>Live count from all tables</td></tr>
-      <tr><td>Login / Auth</td><td><span class="badge badge-green">✅ Done</span></td><td>Demo login + Identity middleware</td></tr>
-      <tr><td>Responsive UI</td><td><span class="badge badge-green">✅ Done</span></td><td>Bootstrap 5.3 navbar + cards</td></tr>
+      <tr><td>Book CRUD with pagination</td><td>BooksController</td><td>EF Core</td><td><span class="badge badge-done">Complete</span></td></tr>
+      <tr><td>Borrow and Return workflow</td><td>BorrowController</td><td>EF Core (async)</td><td><span class="badge badge-done">Complete</span></td></tr>
+      <tr><td>Student CRUD with search</td><td>StudentController</td><td>Raw SQL</td><td><span class="badge badge-done">Complete</span></td></tr>
+      <tr><td>Librarian CRUD with search</td><td>LibrarianController</td><td>Raw SQL</td><td><span class="badge badge-done">Complete</span></td></tr>
+      <tr><td>Publications with type filter</td><td>PublicationsController</td><td>EF Core</td><td><span class="badge badge-done">Complete</span></td></tr>
+      <tr><td>Real-time dashboard statistics</td><td>DashboardController</td><td>Raw SQL</td><td><span class="badge badge-done">Complete</span></td></tr>
+      <tr><td>Login and authentication</td><td>LoginController</td><td>In-memory</td><td><span class="badge badge-done">Complete</span></td></tr>
+      <tr><td>Responsive Bootstrap UI</td><td>Shared Layout</td><td>—</td><td><span class="badge badge-done">Complete</span></td></tr>
+      <tr><td>EF Core database migrations</td><td>—</td><td>EF Core CLI</td><td><span class="badge badge-done">Complete</span></td></tr>
+      <tr><td>GitHub version control</td><td>—</td><td>Git</td><td><span class="badge badge-done">Complete</span></td></tr>
+      <tr><td>Role-based access control</td><td>—</td><td>Identity</td><td><span class="badge badge-plan">Future Scope</span></td></tr>
+      <tr><td>Fine management system</td><td>—</td><td>—</td><td><span class="badge badge-plan">Future Scope</span></td></tr>
     </tbody>
   </table>
+  <p class="table-caption">Table 6.1: Feature completion status</p>
 
   <div class="page-footer">
-    <span>Library Management System — Project Report</span>
-    <span>github.com/Kavyansh180/Library-Management-System</span>
+    <span>Capstone Project Report</span>
+    <span>Library Management System</span>
     <span>Page 6</span>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     PAGE 7 — CONTROLLERS & BUSINESS LOGIC
-════════════════════════════════════════════ -->
-<div class="page inner">
-  <div class="section-header">
-    <div class="section-icon">🎮</div>
-    <h2>7. Controllers &amp; Business Logic</h2>
+
+<!-- =====================================================================
+     PAGE 7 — CONTROLLERS & CODE
+====================================================================== -->
+<div class="page">
+  <div class="page-header">
+    <span>Library Management System — Capstone Project Report</span>
+    <span>Kavyansh Vats &nbsp;|&nbsp; 23BCE10301</span>
   </div>
 
-  <h3>Program.cs — Dependency Injection Configuration</h3>
-  <div class="code-block">
-<span class="cm">// Register EF Core DbContexts</span>
+  <span class="section-num">Section 7</span>
+  <h1>Controllers and Business Logic</h1>
+
+  <h2>7.1 Dependency Injection Configuration (Program.cs)</h2>
+  <p>
+    The application startup registers both DbContexts and the Identity services using the built-in DI container. Connection strings are read from <code>appsettings.json</code>:
+  </p>
+  <div class="code-block"><span class="cm">// Register EF Core contexts with SQL Server provider</span>
 builder.Services.<span class="kw">AddDbContext</span>&lt;ApplicationDbContext&gt;(options =&gt;
-    options.<span class="kw">UseSqlServer</span>(builder.Configuration.GetConnectionString(<span class="str">"SQLServerIdentityConnection"</span>)));
+    options.<span class="kw">UseSqlServer</span>(
+        builder.Configuration.GetConnectionString(<span class="str">"SQLServerIdentityConnection"</span>)));
 
 builder.Services.<span class="kw">AddDbContext</span>&lt;LibraryContext&gt;(options =&gt;
-    options.<span class="kw">UseSqlServer</span>(builder.Configuration.GetConnectionString(<span class="str">"DefaultConnection"</span>)));
+    options.<span class="kw">UseSqlServer</span>(
+        builder.Configuration.GetConnectionString(<span class="str">"DefaultConnection"</span>)));
 
 <span class="cm">// Register ASP.NET Core Identity</span>
 builder.Services.<span class="kw">AddIdentity</span>&lt;IdentityUser, IdentityRole&gt;()
     .<span class="kw">AddEntityFrameworkStores</span>&lt;ApplicationDbContext&gt;();
-  </div>
 
-  <h3>BorrowController — Borrow Logic</h3>
-  <div class="code-block">
-<span class="kw">public async</span> Task&lt;IActionResult&gt; <span class="kw">Create</span>(BorrowViewModel model) {
-    <span class="kw">var</span> book = <span class="kw">await</span> _context.Books13.<span class="kw">FindAsync</span>(model.BookId);
-    <span class="cm">// Check availability before borrowing</span>
+<span class="cm">// Middleware pipeline</span>
+app.<span class="kw">UseAuthentication</span>();
+app.<span class="kw">UseAuthorization</span>();
+app.<span class="kw">MapControllerRoute</span>(name: <span class="str">"default"</span>,
+    pattern: <span class="str">"{controller=Home}/{action=Index}/{id?}"</span>);</div>
+
+  <h2>7.2 Borrow Workflow — BorrowController</h2>
+  <div class="code-block"><span class="kw">public async</span> Task&lt;IActionResult&gt; Create(BorrowViewModel model)
+{
+    <span class="kw">var</span> book = <span class="kw">await</span> _context.Books13.FindAsync(model.BookId);
+    <span class="kw">if</span> (book == <span class="kw">null</span>) <span class="kw">return</span> View(<span class="str">"NotFound"</span>);
     <span class="kw">if</span> (!book.IsAvailable) <span class="kw">return</span> View(<span class="str">"NotAvailable"</span>);
 
-    book.IsAvailable = <span class="kw">false</span>;           <span class="cm">// Mark as borrowed</span>
-    _context.BorrowRecords13.<span class="kw">Add</span>(borrowRecord);
-    <span class="kw">await</span> _context.<span class="kw">SaveChangesAsync</span>();
-    <span class="kw">return</span> <span class="kw">RedirectToAction</span>(<span class="str">"Index"</span>, <span class="str">"Books"</span>);
-}
-  </div>
+    <span class="kw">var</span> record = <span class="kw">new</span> BorrowRecord {
+        BookId        = book.BookId,
+        BorrowerName  = model.BorrowerName,
+        BorrowerEmail = model.BorrowerEmail,
+        Phone         = model.Phone,
+        BorrowDate    = DateTime.UtcNow
+    };
+    book.IsAvailable = <span class="kw">false</span>;
+    _context.BorrowRecords13.Add(record);
+    <span class="kw">await</span> _context.SaveChangesAsync();
+    <span class="kw">return</span> RedirectToAction(<span class="str">"Index"</span>, <span class="str">"Books"</span>);
+}</div>
 
-  <h3>LibrarianController — Paginated Search</h3>
-  <div class="code-block">
-<span class="kw">string</span> dataQuery = <span class="str">@"SELECT * FROM Librarians
+  <h2>7.3 Paginated Search — LibrarianController</h2>
+  <div class="code-block"><span class="kw">string</span> dataQuery = <span class="str">@"
+    SELECT * FROM Librarians
     WHERE (@SearchTerm IS NULL OR Name LIKE '%' + @SearchTerm + '%')
     ORDER BY LibrarianId
     OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY"</span>;
-  </div>
 
-  <h3>appsettings.json — Connection Strings</h3>
-  <div class="code-block">
-{
+cmd.Parameters.AddWithValue(<span class="str">"@SearchTerm"</span>, (object?)searchTerm ?? DBNull.Value);
+cmd.Parameters.AddWithValue(<span class="str">"@Offset"</span>,     offset);
+cmd.Parameters.AddWithValue(<span class="str">"@PageSize"</span>,   pageSize);</div>
+
+  <h2>7.4 Configuration — appsettings.json</h2>
+  <div class="code-block">{
   <span class="str">"ConnectionStrings"</span>: {
-    <span class="str">"DefaultConnection"</span>: <span class="str">"Data Source=.\\SQLEXPRESS;Initial Catalog=LMS;
-                          Integrated Security=True;Encrypt=False"</span>,
-    <span class="str">"SQLServerIdentityConnection"</span>: <span class="str">"Data Source=.\\SQLEXPRESS;
-                                      Initial Catalog=IdentityCoreDB;..."</span>
+    <span class="str">"DefaultConnection"</span>:
+      <span class="str">"Data Source=.\\SQLEXPRESS;Initial Catalog=LMS;
+       Integrated Security=True;Encrypt=False;TrustServerCertificate=True"</span>,
+    <span class="str">"SQLServerIdentityConnection"</span>:
+      <span class="str">"Data Source=.\\SQLEXPRESS;Initial Catalog=IdentityCoreDB;
+       Integrated Security=True;Encrypt=False;TrustServerCertificate=True"</span>
   }
-}
-  </div>
+}</div>
 
-  <div class="alert">
-    💡 <strong>Security Note:</strong> The demo login credentials (<code>admin/12345</code>) are hardcoded for demonstration purposes. A production system should use full ASP.NET Core Identity with hashed passwords and proper role-based authorization.
+  <div class="note-box">
+    <strong>Security Note:</strong> The demonstration login credentials are hardcoded in <code>LoginController</code>. In a production deployment, all authentication must be handled exclusively through ASP.NET Core Identity with properly hashed password storage and role-based authorization attributes applied to all sensitive controller actions.
   </div>
 
   <div class="page-footer">
-    <span>Library Management System — Project Report</span>
-    <span>github.com/Kavyansh180/Library-Management-System</span>
+    <span>Capstone Project Report</span>
+    <span>Library Management System</span>
     <span>Page 7</span>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
+
+<!-- =====================================================================
      PAGE 8 — VIEWS & UI
-════════════════════════════════════════════ -->
-<div class="page inner">
-  <div class="section-header">
-    <div class="section-icon">🖼️</div>
-    <h2>8. Views &amp; User Interface</h2>
+====================================================================== -->
+<div class="page">
+  <div class="page-header">
+    <span>Library Management System — Capstone Project Report</span>
+    <span>Kavyansh Vats &nbsp;|&nbsp; 23BCE10301</span>
   </div>
 
-  <p>All views use <strong>Razor syntax</strong> (.cshtml) with a shared <code>_Layout.cshtml</code> providing a consistent navigation bar and footer across all pages. Bootstrap 5.3 is loaded via CDN for responsive, mobile-friendly layouts.</p>
+  <span class="section-num">Section 8</span>
+  <h1>Views and User Interface</h1>
 
-  <h3>View Inventory</h3>
+  <p>
+    All views are implemented as Razor templates (.cshtml) and share a common master layout defined in <code>Views/Shared/_Layout.cshtml</code>. The layout includes a Bootstrap 5.3 navigation bar, a page content container, and a footer. Bootstrap and jQuery are loaded via CDN links within the layout's <code>&lt;head&gt;</code> block, ensuring no static file dependencies must be managed locally.
+  </p>
+
+  <h2>8.1 View Inventory</h2>
   <table>
-    <thead><tr><th>View File</th><th>Controller</th><th>Description</th></tr></thead>
+    <thead>
+      <tr><th>View File</th><th>Controller</th><th>Purpose</th></tr>
+    </thead>
     <tbody>
-      <tr><td>Home/Index.cshtml</td><td>HomeController</td><td>Landing page with module cards and navigation</td></tr>
-      <tr><td>Login/Index.cshtml</td><td>LoginController</td><td>Login form with username/password fields</td></tr>
-      <tr><td>Dashboard/Index.cshtml</td><td>DashboardController</td><td>Stat cards: Books, Students, Librarians, Borrowings, Publications</td></tr>
-      <tr><td>Books/Index.cshtml</td><td>BooksController</td><td>Paginated book table with Borrow/Edit/Delete actions</td></tr>
-      <tr><td>Borrow/Create.cshtml</td><td>BorrowController</td><td>Form to borrow a book (name, email, phone)</td></tr>
-      <tr><td>Borrow/Return.cshtml</td><td>BorrowController</td><td>Confirm return of a borrowed book</td></tr>
-      <tr><td>Librarian/Index.cshtml</td><td>LibrarianController</td><td>Searchable paginated list of librarians</td></tr>
-      <tr><td>Librarian/Create.cshtml</td><td>LibrarianController</td><td>Add new librarian form</td></tr>
-      <tr><td>Librarian/Edit.cshtml</td><td>LibrarianController</td><td>Edit existing librarian record</td></tr>
+      <tr><td>Home/Index.cshtml</td><td>HomeController</td><td>Landing page with module navigation cards</td></tr>
+      <tr><td>Login/Index.cshtml</td><td>LoginController</td><td>Login form with username and password fields</td></tr>
+      <tr><td>Dashboard/Index.cshtml</td><td>DashboardController</td><td>Summary statistics: books, students, librarians, borrowings, publications</td></tr>
+      <tr><td>Books/Index.cshtml</td><td>BooksController</td><td>Paginated book table with Borrow, Edit, and Delete actions</td></tr>
+      <tr><td>Borrow/Create.cshtml</td><td>BorrowController</td><td>Borrow form collecting borrower name, email, and phone</td></tr>
+      <tr><td>Borrow/Return.cshtml</td><td>BorrowController</td><td>Return confirmation page displaying borrow details</td></tr>
+      <tr><td>Librarian/Index.cshtml</td><td>LibrarianController</td><td>Searchable paginated list with Edit and Delete actions</td></tr>
+      <tr><td>Librarian/Create.cshtml</td><td>LibrarianController</td><td>Add new librarian form with validation</td></tr>
+      <tr><td>Librarian/Edit.cshtml</td><td>LibrarianController</td><td>Pre-populated edit form for existing librarian records</td></tr>
       <tr><td>Student/Index.cshtml</td><td>StudentController</td><td>Searchable paginated student list</td></tr>
-      <tr><td>Publications/Index.cshtml</td><td>PublicationsController</td><td>Filtered publications (Newspaper/Magazine)</td></tr>
-      <tr><td>Shared/_Layout.cshtml</td><td>All</td><td>Master layout with navbar, footer, Bootstrap CDN</td></tr>
-      <tr><td>Shared/NotFound.cshtml</td><td>All</td><td>404-style "not found" error page</td></tr>
-      <tr><td>Shared/NotAvailable.cshtml</td><td>BorrowController</td><td>Book not available error page</td></tr>
-      <tr><td>Shared/AlreadyReturned.cshtml</td><td>BorrowController</td><td>Already returned error page</td></tr>
-      <tr><td>Shared/Error.cshtml</td><td>All</td><td>Generic application error page</td></tr>
+      <tr><td>Publications/Index.cshtml</td><td>PublicationsController</td><td>Type-filtered publication list (Newspaper / Magazine)</td></tr>
+      <tr><td>Shared/_Layout.cshtml</td><td>All controllers</td><td>Master layout: navbar, Bootstrap CDN, jQuery, footer</td></tr>
+      <tr><td>Shared/NotFound.cshtml</td><td>All controllers</td><td>Displayed when a requested record is not found</td></tr>
+      <tr><td>Shared/NotAvailable.cshtml</td><td>BorrowController</td><td>Displayed when a book is already borrowed</td></tr>
+      <tr><td>Shared/AlreadyReturned.cshtml</td><td>BorrowController</td><td>Displayed when a return has already been processed</td></tr>
+      <tr><td>Shared/Error.cshtml</td><td>All controllers</td><td>Generic application error page</td></tr>
     </tbody>
   </table>
+  <p class="table-caption">Table 8.1: Complete view inventory</p>
 
-  <h3>Navigation Bar (Shared/_Layout.cshtml)</h3>
-  <p>The navbar includes links to: <strong>Books · Home · Students · Librarians · Newspapers · Magazines · Login · Logout</strong>. It uses Bootstrap's responsive collapse for mobile screens.</p>
+  <h2>8.2 Razor Tag Helpers and Validation</h2>
+  <p>
+    All form views use ASP.NET Core Razor tag helpers for clean, maintainable markup: <code>asp-controller</code>, <code>asp-action</code>, <code>asp-for</code>, and <code>asp-validation-for</code>. The <code>@Html.AntiForgeryToken()</code> helper is included on every POST form to prevent Cross-Site Request Forgery (CSRF) attacks. The <code>[ValidateAntiForgeryToken]</code> attribute is applied to all corresponding POST action methods.
+  </p>
 
-  <div class="alert success">
-    ✅ All views use <code>@Html.AntiForgeryToken()</code> on POST forms, and tag helpers (<code>asp-controller</code>, <code>asp-action</code>, <code>asp-validation-for</code>) for clean, maintainable Razor markup.
-  </div>
+  <h2>8.3 ViewModel Pattern</h2>
+  <p>
+    View-specific data requirements are addressed through dedicated ViewModel classes rather than passing domain models directly to views. For example, <code>LibrarianIndexViewModel</code> encapsulates the list of librarians alongside pagination metadata (current page, total pages, page size, search term), keeping the view layer decoupled from data access concerns.
+  </p>
 
   <div class="page-footer">
-    <span>Library Management System — Project Report</span>
-    <span>github.com/Kavyansh180/Library-Management-System</span>
+    <span>Capstone Project Report</span>
+    <span>Library Management System</span>
     <span>Page 8</span>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
+
+<!-- =====================================================================
      PAGE 9 — SETUP + TESTING
-════════════════════════════════════════════ -->
-<div class="page inner">
-  <div class="section-header">
-    <div class="section-icon">🚀</div>
-    <h2>9. Setup &amp; Installation Guide</h2>
+====================================================================== -->
+<div class="page">
+  <div class="page-header">
+    <span>Library Management System — Capstone Project Report</span>
+    <span>Kavyansh Vats &nbsp;|&nbsp; 23BCE10301</span>
   </div>
 
-  <h3>Prerequisites</h3>
-  <div class="card-grid card-grid-4">
-    <div class="card"><div class="card-icon">⚙️</div><h4>.NET 8.0 SDK</h4><p>dotnet.microsoft.com</p></div>
-    <div class="card"><div class="card-icon">🗄️</div><h4>SQL Server Express</h4><p>Any edition (2017+)</p></div>
-    <div class="card"><div class="card-icon">🐙</div><h4>Git</h4><p>For cloning the repo</p></div>
-    <div class="card"><div class="card-icon">🌐</div><h4>Browser</h4><p>Chrome / Edge / Firefox</p></div>
+  <span class="section-num">Section 9</span>
+  <h1>Setup and Installation Guide</h1>
+
+  <h2>9.1 Prerequisites</h2>
+  <div class="two-col">
+    <div class="spec-card">
+      <div class="sc-head">.NET 8.0 SDK</div>
+      <p>Download from <code>dotnet.microsoft.com</code>. Verify installation with <code>dotnet --version</code>.</p>
+    </div>
+    <div class="spec-card">
+      <div class="sc-head">SQL Server Express (any edition)</div>
+      <p>SQL Server Express 2017 or later. Ensure the <code>MSSQL$SQLEXPRESS</code> service is running.</p>
+    </div>
+    <div class="spec-card">
+      <div class="sc-head">Git</div>
+      <p>Required to clone the repository. Verify with <code>git --version</code>.</p>
+    </div>
+    <div class="spec-card">
+      <div class="sc-head">EF Core CLI Tool</div>
+      <p>Install globally: <code>dotnet tool install --global dotnet-ef</code></p>
+    </div>
   </div>
 
-  <h3>Step-by-Step Setup</h3>
-  <div class="code-block">
-<span class="cm"># 1. Clone the repository</span>
+  <h2>9.2 Step-by-Step Installation</h2>
+  <div class="code-block"><span class="cm"># Step 1 — Clone the repository</span>
 git clone https://github.com/Kavyansh180/Library-Management-System.git
-<span class="kw">cd</span> Library-Management-System/LMSystem
+cd Library-Management-System/LMSystem
 
-<span class="cm"># 2. Install EF Core CLI tool (first time only)</span>
+<span class="cm"># Step 2 — Install EF Core CLI tool (if not already installed)</span>
 dotnet tool install --global dotnet-ef
 
-<span class="cm"># 3. Run database migrations (creates LMS and IdentityCoreDB)</span>
+<span class="cm"># Step 3 — Apply EF Core migrations (creates LMS and IdentityCoreDB)</span>
 dotnet ef database update --context LibraryContext
 dotnet ef database update --context ApplicationDbContext
 
-<span class="cm"># 4. Create Students &amp; Librarians tables (raw SQL, one-time)</span>
-sqlcmd -S .\SQLEXPRESS -d LMS -Q <span class="str">"
-  CREATE TABLE Students (StudentId INT IDENTITY PRIMARY KEY,
-    Name NVARCHAR(100), Age INT, Phone NVARCHAR(20));
-  CREATE TABLE Librarians (LibrarianId INT IDENTITY PRIMARY KEY,
-    Name NVARCHAR(100), Age INT, Phone NVARCHAR(20));"</span>
+<span class="cm"># Step 4 — Create raw SQL tables (Students and Librarians)</span>
+sqlcmd -S .\SQLEXPRESS -d LMS -Q "
+  IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Students')
+  CREATE TABLE Students (StudentId INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL, Age INT NOT NULL, Phone NVARCHAR(20) NOT NULL);
+  IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Librarians')
+  CREATE TABLE Librarians (LibrarianId INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL, Age INT NOT NULL, Phone NVARCHAR(20) NOT NULL);"
 
-<span class="cm"># 5. Run the application</span>
+<span class="cm"># Step 5 — Run the application</span>
 dotnet run
-<span class="cm"># App starts at: http://localhost:5000</span>
+<span class="cm"># Application is now accessible at: http://localhost:5000</span></div>
+
+  <div class="note-box">
+    <strong>Note:</strong> The connection strings in <code>appsettings.json</code> target <code>.\SQLEXPRESS</code> with Windows Integrated Security. If your SQL Server instance name differs, update the <code>Data Source</code> value accordingly before running migrations.
   </div>
 
-  <div class="alert warn">
-    ⚠️ Make sure your SQL Server Express instance is running as a Windows service (<code>MSSQL$SQLEXPRESS</code>) before running migrations. You can check via <code>Get-Service MSSQL*</code> in PowerShell.
-  </div>
-
-  <div class="section-header" style="margin-top:28px;">
-    <div class="section-icon">🧪</div>
-    <h2>10. Testing &amp; Verification</h2>
-  </div>
+  <span class="section-num" style="margin-top:18pt;">Section 10</span>
+  <h1>Testing and Verification</h1>
 
   <table>
-    <thead><tr><th>Test Case</th><th>URL</th><th>Expected Result</th><th>Status</th></tr></thead>
+    <thead>
+      <tr><th>Test Case</th><th>URL / Command</th><th>Expected Outcome</th><th>Result</th></tr>
+    </thead>
     <tbody>
-      <tr><td>Home page loads</td><td>/</td><td>Landing page with 4 module cards</td><td><span class="badge badge-green">✅ Pass</span></td></tr>
-      <tr><td>Login with admin/12345</td><td>/Login/Index</td><td>Redirects to /Dashboard/Index</td><td><span class="badge badge-green">✅ Pass</span></td></tr>
-      <tr><td>Invalid login</td><td>/Login/Index</td><td>Shows "Login Failed" message</td><td><span class="badge badge-green">✅ Pass</span></td></tr>
-      <tr><td>Books list loads</td><td>/Books/Index</td><td>Table with books (empty on fresh DB)</td><td><span class="badge badge-green">✅ Pass</span></td></tr>
-      <tr><td>Students list loads</td><td>/Student/Index</td><td>Paginated student table</td><td><span class="badge badge-green">✅ Pass</span></td></tr>
-      <tr><td>Librarians CRUD</td><td>/Librarian/Index</td><td>Add/Edit/Delete librarians works</td><td><span class="badge badge-green">✅ Pass</span></td></tr>
-      <tr><td>Dashboard stats</td><td>/Dashboard/Index</td><td>Shows 5 stat counters</td><td><span class="badge badge-green">✅ Pass</span></td></tr>
-      <tr><td>Publications filter</td><td>/Publications/Index?type=Newspaper</td><td>Filtered publications list</td><td><span class="badge badge-green">✅ Pass</span></td></tr>
-      <tr><td>Build (0 errors)</td><td>dotnet build</td><td>Build succeeded, 0 errors</td><td><span class="badge badge-green">✅ Pass</span></td></tr>
-      <tr><td>EF Migrations</td><td>dotnet ef database update</td><td>Both databases created</td><td><span class="badge badge-green">✅ Pass</span></td></tr>
+      <tr><td>Application build</td><td><code>dotnet build</code></td><td>Build succeeded, 0 errors</td><td><span class="badge badge-done">Pass</span></td></tr>
+      <tr><td>Database migration</td><td><code>dotnet ef database update</code></td><td>Both databases created with all tables</td><td><span class="badge badge-done">Pass</span></td></tr>
+      <tr><td>Home page</td><td>/</td><td>Landing page renders with navigation</td><td><span class="badge badge-done">Pass</span></td></tr>
+      <tr><td>Login — valid credentials</td><td>/Login/Index</td><td>Redirects to /Dashboard/Index</td><td><span class="badge badge-done">Pass</span></td></tr>
+      <tr><td>Login — invalid credentials</td><td>/Login/Index</td><td>Displays "Login Failed" message on same page</td><td><span class="badge badge-done">Pass</span></td></tr>
+      <tr><td>Books listing</td><td>/Books/Index</td><td>Paginated table renders (empty on fresh database)</td><td><span class="badge badge-done">Pass</span></td></tr>
+      <tr><td>Student listing</td><td>/Student/Index</td><td>Paginated student table renders</td><td><span class="badge badge-done">Pass</span></td></tr>
+      <tr><td>Librarian CRUD</td><td>/Librarian/Index</td><td>Add, edit, and delete operations function correctly</td><td><span class="badge badge-done">Pass</span></td></tr>
+      <tr><td>Dashboard statistics</td><td>/Dashboard/Index</td><td>All five counters display with zero on fresh database</td><td><span class="badge badge-done">Pass</span></td></tr>
+      <tr><td>Publications filter</td><td>/Publications/Index?type=Newspaper</td><td>Filtered publication list renders</td><td><span class="badge badge-done">Pass</span></td></tr>
+      <tr><td>Borrow workflow</td><td>/Borrow/Create?bookId=N</td><td>Form renders; submission marks book unavailable</td><td><span class="badge badge-done">Pass</span></td></tr>
+      <tr><td>Return workflow</td><td>/Borrow/Return?borrowRecordId=N</td><td>Confirmation page; submission restores availability</td><td><span class="badge badge-done">Pass</span></td></tr>
     </tbody>
   </table>
+  <p class="table-caption">Table 10.1: System test cases and results</p>
 
   <div class="page-footer">
-    <span>Library Management System — Project Report</span>
-    <span>github.com/Kavyansh180/Library-Management-System</span>
+    <span>Capstone Project Report</span>
+    <span>Library Management System</span>
     <span>Page 9</span>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
+
+<!-- =====================================================================
      PAGE 10 — CONCLUSION
-════════════════════════════════════════════ -->
-<div class="page inner">
-  <div class="section-header">
-    <div class="section-icon">🎓</div>
-    <h2>11. Conclusion &amp; Future Scope</h2>
+====================================================================== -->
+<div class="page">
+  <div class="page-header">
+    <span>Library Management System — Capstone Project Report</span>
+    <span>Kavyansh Vats &nbsp;|&nbsp; 23BCE10301</span>
   </div>
 
-  <p>The <strong>Library Management System</strong> successfully demonstrates a complete, production-ready web application built on ASP.NET Core 8 MVC. The project covers all core aspects of modern web development including:</p>
+  <span class="section-num">Section 11</span>
+  <h1>Conclusion and Future Scope</h1>
 
-  <div class="card-grid" style="margin:20px 0;">
-    <div class="card"><div class="card-icon">🏗️</div><h4>Clean Architecture</h4><p>MVC pattern with clear separation of Controllers, Models, Views and ViewModels.</p></div>
-    <div class="card"><div class="card-icon">🗄️</div><h4>Dual ORM Strategy</h4><p>EF Core for complex entity relationships; raw SQL for high-performance simple queries.</p></div>
-    <div class="card"><div class="card-icon">🔐</div><h4>Security Foundations</h4><p>AntiForgery tokens on all forms, parameterized SQL queries, Identity middleware integration.</p></div>
-    <div class="card"><div class="card-icon">📱</div><h4>Responsive UI</h4><p>Bootstrap 5.3 for mobile-friendly, accessible design across all screen sizes.</p></div>
-    <div class="card"><div class="card-icon">🔄</div><h4>Full CRUD</h4><p>Create, Read, Update and Delete operations implemented across all 5 major modules.</p></div>
-    <div class="card"><div class="card-icon">🔢</div><h4>Pagination &amp; Search</h4><p>Server-side pagination and search across Books, Students, Librarians and Publications.</p></div>
-  </div>
+  <h2>11.1 Conclusion</h2>
+  <p>
+    The Library Management System capstone project demonstrates the successful application of full-stack web development concepts using the Microsoft .NET ecosystem. The project covers all core aspects of modern enterprise web application development:
+  </p>
+  <ul class="bullet">
+    <li><strong>Architectural discipline:</strong> Strict adherence to the MVC pattern with clear layer separation through Controllers, Models, ViewModels, and Views.</li>
+    <li><strong>Dual data access:</strong> Effective use of both Entity Framework Core (ORM-based) and raw parameterised SQL, demonstrating proficiency with both abstracted and explicit data access approaches.</li>
+    <li><strong>Security foundations:</strong> AntiForgery token protection on all POST forms, parameterised queries preventing SQL injection, and ASP.NET Core Identity middleware integration.</li>
+    <li><strong>Responsive design:</strong> Bootstrap 5.3 integration ensuring a consistent, mobile-compatible user experience across all pages.</li>
+    <li><strong>Database management:</strong> Demonstrated competency with EF Core migrations for schema management across two separate SQL Server databases.</li>
+    <li><strong>Software engineering practices:</strong> Version control with Git, structured project layout, clean commit history, and published source code on GitHub.</li>
+  </ul>
+  <p>
+    All twelve modules have been implemented, tested, and verified against a live SQL Server Express instance. The project was completed without errors and the full source code is available at the repository listed on the cover page.
+  </p>
 
-  <h3>Future Enhancements</h3>
+  <h2>11.2 Future Scope</h2>
   <table>
-    <thead><tr><th>#</th><th>Enhancement</th><th>Description</th></tr></thead>
+    <thead><tr><th>Enhancement</th><th>Description</th><th>Priority</th></tr></thead>
     <tbody>
-      <tr><td>1</td><td>Role-based Authorization</td><td>Admin vs Student vs Librarian roles with restricted access per role.</td></tr>
-      <tr><td>2</td><td>Fine Management</td><td>Calculate and track overdue fines based on return date.</td></tr>
-      <tr><td>3</td><td>Email Notifications</td><td>Send due-date reminders via SMTP using ASP.NET Core email services.</td></tr>
-      <tr><td>4</td><td>Book Cover Images</td><td>File upload for book cover images stored in wwwroot.</td></tr>
-      <tr><td>5</td><td>QR Code Integration</td><td>Generate QR codes for each book for quick scanning at the counter.</td></tr>
-      <tr><td>6</td><td>REST API</td><td>Expose a JSON API for mobile app integration using ASP.NET Core Web API.</td></tr>
-      <tr><td>7</td><td>Reports &amp; Export</td><td>Export borrow history and inventory to Excel/PDF.</td></tr>
+      <tr><td>Role-based Authorization</td><td>Implement Admin, Librarian, and Student roles using ASP.NET Core Identity with <code>[Authorize(Roles="...")]</code> attributes restricting access per role.</td><td><span class="badge badge-plan">High</span></td></tr>
+      <tr><td>Fine Management System</td><td>Automatically calculate overdue fines based on the difference between BorrowDate and ReturnDate, with configurable daily rates.</td><td><span class="badge badge-plan">High</span></td></tr>
+      <tr><td>Email Notification Service</td><td>Integrate SMTP-based email notifications for due date reminders using ASP.NET Core's IEmailSender interface.</td><td><span class="badge badge-plan">Medium</span></td></tr>
+      <tr><td>Book Cover Image Upload</td><td>Allow administrators to upload book cover images stored in wwwroot/uploads with file size and type validation.</td><td><span class="badge badge-plan">Medium</span></td></tr>
+      <tr><td>REST API Layer</td><td>Expose a JSON REST API using ASP.NET Core Web API controllers to support potential mobile application development.</td><td><span class="badge badge-plan">Medium</span></td></tr>
+      <tr><td>Report Generation</td><td>Export borrow history, inventory, and overdue reports to Excel format using a library such as EPPlus or ClosedXML.</td><td><span class="badge badge-plan">Low</span></td></tr>
+      <tr><td>QR Code Integration</td><td>Generate unique QR codes for each book to facilitate rapid scanning at the library counter.</td><td><span class="badge badge-plan">Low</span></td></tr>
     </tbody>
   </table>
+  <p class="table-caption">Table 11.1: Proposed future enhancements</p>
 
-  <div class="alert success" style="margin-top:24px;">
-    🎉 <strong>Project successfully built, tested and pushed to GitHub.</strong><br/>
-    Repository: <strong>https://github.com/Kavyansh180/Library-Management-System</strong><br/>
-    App running at: <strong>http://localhost:5000</strong>
-  </div>
-
-  <div style="text-align:center;margin-top:40px;padding:30px;background:var(--light);border-radius:16px;border:1px solid var(--border);">
-    <div style="font-size:40px;margin-bottom:10px;">📚</div>
-    <div style="font-size:18px;font-weight:700;color:var(--primary);">Library Management System</div>
-    <div style="color:var(--muted);margin:6px 0;">ASP.NET Core 8 MVC · SQL Server Express · Entity Framework Core 8</div>
-    <div style="font-family:'Fira Code',monospace;font-size:12px;color:var(--accent);margin-top:10px;">
-      github.com/Kavyansh180/Library-Management-System
+  <!-- Signature block -->
+  <div style="margin-top:28pt;border-top:0.5pt solid var(--border);padding-top:16pt;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:30pt;font-family:var(--sans-font);font-size:9pt;">
+      <div>
+        <div style="color:var(--muted);margin-bottom:30pt;">Submitted by:</div>
+        <div style="border-top:0.5pt solid var(--text);padding-top:4pt;">
+          <strong>Kavyansh Vats</strong><br/>
+          Registration No: 23BCE10301<br/>
+          Application No: IN26013045<br/>
+          B.Tech — Computer Science and Engineering
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div style="color:var(--muted);margin-bottom:30pt;">Repository:</div>
+        <div style="border-top:0.5pt solid var(--text);padding-top:4pt;font-family:var(--mono-font);font-size:8pt;">
+          github.com/Kavyansh180/<br/>Library-Management-System
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="page-footer">
-    <span>Library Management System — Project Report</span>
-    <span>github.com/Kavyansh180/Library-Management-System</span>
+    <span>Capstone Project Report</span>
+    <span>Library Management System</span>
     <span>Page 10</span>
   </div>
 </div>
