@@ -1,0 +1,54 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-center py-5">
+    <h1 class="display-4 fw-bold text-dark">📚 Library Management System</h1>
+    <p class="lead text-muted mt-3">Manage books, students, librarians, borrowing records and publications all in one place.</p>
+    <hr class="my-4" />
+    <div class="row justify-content-center g-4 mt-2">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center p-4">
+                    <div class="fs-1">📖</div>
+                    <h5 class="card-title mt-2">Books</h5>
+                    <p class="card-text text-muted small">Browse and manage the book catalogue.</p>
+                    <a href="/Books/Index" class="btn btn-dark btn-sm mt-2">View Books</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center p-4">
+                    <div class="fs-1">🎓</div>
+                    <h5 class="card-title mt-2">Students</h5>
+                    <p class="card-text text-muted small">Manage enrolled student records.</p>
+                    <a href="/Student/Index" class="btn btn-dark btn-sm mt-2">View Students</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center p-4">
+                    <div class="fs-1">👔</div>
+                    <h5 class="card-title mt-2">Librarians</h5>
+                    <p class="card-text text-muted small">Manage library staff records.</p>
+                    <a href="/Librarian/Index" class="btn btn-dark btn-sm mt-2">View Librarians</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center p-4">
+                    <div class="fs-1">📰</div>
+                    <h5 class="card-title mt-2">Publications</h5>
+                    <p class="card-text text-muted small">Browse newspapers and magazines.</p>
+                    <a href="/Publications/Index?type=Newspaper" class="btn btn-dark btn-sm mt-2">View Publications</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-5">
+        <a href="/Login/Index" class="btn btn-outline-dark btn-lg px-5">🔐 Login to Dashboard</a>
+    </div>
+</div>

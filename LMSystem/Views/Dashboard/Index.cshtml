@@ -1,0 +1,74 @@
+@model LMSystem.Models.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2 class="mb-4">📊 Dashboard</h2>
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-success">@TempData["message"]</div>
+}
+
+<div class="row g-4">
+    <div class="col-md-4 col-sm-6">
+        <div class="card text-white bg-dark border-0 shadow-sm">
+            <div class="card-body text-center py-4">
+                <div class="fs-1">📖</div>
+                <h3 class="fw-bold mt-2">@Model.TotalBooks</h3>
+                <p class="mb-0 text-light">Total Books</p>
+            </div>
+            <div class="card-footer text-center border-0 bg-secondary bg-opacity-25">
+                <a href="/Books/Index" class="text-white text-decoration-none small">View Books →</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="card text-white bg-primary border-0 shadow-sm">
+            <div class="card-body text-center py-4">
+                <div class="fs-1">🎓</div>
+                <h3 class="fw-bold mt-2">@Model.TotalStudents</h3>
+                <p class="mb-0 text-light">Total Students</p>
+            </div>
+            <div class="card-footer text-center border-0 bg-primary bg-opacity-75">
+                <a href="/Student/Index" class="text-white text-decoration-none small">View Students →</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="card text-white bg-success border-0 shadow-sm">
+            <div class="card-body text-center py-4">
+                <div class="fs-1">👔</div>
+                <h3 class="fw-bold mt-2">@Model.TotalLibrarians</h3>
+                <p class="mb-0 text-light">Total Librarians</p>
+            </div>
+            <div class="card-footer text-center border-0 bg-success bg-opacity-75">
+                <a href="/Librarian/Index" class="text-white text-decoration-none small">View Librarians →</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="card text-white bg-warning border-0 shadow-sm">
+            <div class="card-body text-center py-4">
+                <div class="fs-1">🔄</div>
+                <h3 class="fw-bold mt-2">@Model.TotalBorrowings</h3>
+                <p class="mb-0 text-dark">Total Borrowings</p>
+            </div>
+            <div class="card-footer text-center border-0 bg-warning bg-opacity-75">
+                <a href="/Books/Index" class="text-dark text-decoration-none small">View Books →</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="card text-white bg-info border-0 shadow-sm">
+            <div class="card-body text-center py-4">
+                <div class="fs-1">📰</div>
+                <h3 class="fw-bold mt-2">@Model.TotalPublications</h3>
+                <p class="mb-0 text-dark">Total Publications</p>
+            </div>
+            <div class="card-footer text-center border-0 bg-info bg-opacity-75">
+                <a href="/Publications/Index?type=Newspaper" class="text-dark text-decoration-none small">View Publications →</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+@model LMSystem.ViewModels.ReturnViewModel
+@{
+    ViewData["Title"] = "Return Book";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <h2 class="mb-4">📥 Return Book</h2>
+
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <p><strong>Book:</strong> @Model.BookTitle</p>
+                <p><strong>Borrowed By:</strong> @Model.BorrowerName</p>
+                <p><strong>Borrow Date:</strong> @Model.BorrowDate?.ToString("dd MMM yyyy")</p>
+            </div>
+        </div>
+
+        <div class="alert alert-warning">
+            Are you sure you want to mark this book as returned?
+        </div>
+
+        <form asp-action="Return" asp-controller="Borrow" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="BorrowRecordId" value="@Model.BorrowRecordId" />
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-dark">Confirm Return</button>
+                <a href="/Books/Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

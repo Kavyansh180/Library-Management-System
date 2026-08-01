@@ -1,0 +1,18 @@
+using LMSystem.Models;
+
+namespace LMSystem.ViewModels
+{
+    public class StudentIndexViewModel
+    {
+        // Search Filter
+        public string? SearchTerm { get; set; }
+
+        // Pagination Tracking
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public int PageSize { get; set; } = 5; // Records per page
+
+        // Data Payload
+        public List<StudentModel> Students { get; set; } = new List<StudentModel>();
+    }
+}

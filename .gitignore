@@ -1,0 +1,35 @@
+## .NET / ASP.NET Core
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+## NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+## EF Core Migrations (keep migrations, ignore snapshots if needed)
+# Uncomment below if you want to exclude migrations:
+# LMSystem/Migrations/
+
+## Logs
+*.log
+logs/
+
+## Secrets / Config overrides
+appsettings.Development.json
+appsettings.Production.json
+secrets.json
+
+## OS files
+Thumbs.db
+.DS_Store
+
+## Rider / VS Code
+.idea/
+.vscode/
+*.DotSettings.user

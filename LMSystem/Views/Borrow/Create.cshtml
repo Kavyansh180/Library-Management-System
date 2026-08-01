@@ -1,0 +1,50 @@
+@model LMSystem.ViewModels.BorrowViewModel
+@{
+    ViewData["Title"] = "Borrow Book";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <h2 class="mb-4">📤 Borrow Book</h2>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+
+        <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body">
+                <p class="mb-0"><strong>Book:</strong> @Model.BookTitle</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <form asp-action="Create" asp-controller="Borrow" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="BookId" value="@Model.BookId" />
+                    <input type="hidden" name="BookTitle" value="@Model.BookTitle" />
+                    <div class="mb-3">
+                        <label for="BorrowerName" class="form-label fw-semibold">Your Name</label>
+                        <input type="text" class="form-control" id="BorrowerName" name="BorrowerName" required />
+                        <span asp-validation-for="BorrowerName" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="BorrowerEmail" class="form-label fw-semibold">Email</label>
+                        <input type="email" class="form-control" id="BorrowerEmail" name="BorrowerEmail" required />
+                        <span asp-validation-for="BorrowerEmail" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Phone" class="form-label fw-semibold">Phone</label>
+                        <input type="tel" class="form-control" id="Phone" name="Phone" required />
+                        <span asp-validation-for="Phone" class="text-danger small"></span>
+                    </div>
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-dark">Confirm Borrow</button>
+                        <a href="/Books/Index" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
